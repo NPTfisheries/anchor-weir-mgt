@@ -18,16 +18,10 @@ source('./R/harvest_funs.R')
 source('./R/weir_funs.R')
 
 
-# Display rounding only. Calculations retain full precision.
-disp_digits <- 2
+
 
 # Historical input file used to calculate median-derived parameters.
-input_file <- "input_chs.csv"
-file_path <- file.path('./data',input_file)
-# Optional: default scenario values from a CSV year row.
-# For reviewer workflow, leave FALSE and edit the manual values below.
-use_csv_scenario_values <- FALSE
-csv_scenario_year <- 2023
+
 
 # Print reviewer tables in R.
 print_tables <- TRUE
@@ -42,43 +36,7 @@ message(sprintf("Lostine Toolkit — Historical file: %s", input_file))
 # The historical CSV is used here only to calculate median-derived
 # accounting parameters. Scenario/in-year values are entered later.
 
-dat <- read_csv(file_path, show_col_types = FALSE) %>%
-  filter(.data$Stock == "LST") %>%
-  arrange(desc(.data$Year))
 
-
-# Build trap ratio columns safely. Division by zero becomes NA.
-dat <- dat %>%
-  mutate(
-    trap_ratio_no = if_else(Post.NO == 0, NA_real_, Trap.NO / Post.NO), # trap_ratio is the number trapped out of total return?
-    trap_ratio_ho = if_else(Post.HO == 0, NA_real_, Trap.HO / Post.HO)
-  )
-
-m_trap_no <- first5_non_na(dat$trap_ratio_no, dat$Year)
-m_trap_ho <- first5_non_na(dat$trap_ratio_ho, dat$Year)
-m_weir    <- first5_non_na(dat$Weir.Eff,     dat$Year)
-m_abv     <- first5_non_na(dat$PSS.ABV,      dat$Year) #what is PSS?
-m_blw     <- first5_non_na(dat$PSS.BLW,      dat$Year)
-
-# runs a check to ensure at least three years of data
-purrr::walk2(
-  list(m_trap_no, m_trap_ho, m_weir, m_abv, m_blw),
-  c("trap_prop_no", "trap_prop_ho", "weir_efficiency", "survival_above_weir", "survival_below_weir"),
-  check_median
-)
-
-median_params <- list(
-  trap_prop_no        = median(m_trap_no$Value), # median proportion of NO captured at the weir; is this equal to weir efficiency?
-  trap_prop_ho        = median(m_trap_ho$Value),
-  weir_efficiency     = median(m_weir$Value),
-  survival_above_weir = median(m_abv$Value),
-  survival_below_weir = median(m_blw$Value),
-  years_trap_no       = years_used_str(m_trap_no),
-  years_trap_ho       = years_used_str(m_trap_ho),
-  years_weir          = years_used_str(m_weir),
-  years_abv           = years_used_str(m_abv),
-  years_blw           = years_used_str(m_blw)
-)
 
 
 # ============================================================
@@ -225,78 +183,6 @@ anchor_required_no <- find_smallest_feasible_anchor(
   accounting_params = accounting_params,
   start_est = 0)
 
-# ---------
-# RK added this function to better understand the sensitivity of the spawner goal
-evaluate_anchor_spawner_goal <- function(
-    spawner_goals,
-    anchor_inputs,
-    accounting_params,
-    start_est = 0
-) {
-  
-  tibble(
-    spawner_goal = spawner_goals,
-    anchor = purrr::map_dbl(
-      spawner_goal,
-      function(goal) {
-        
-        tmp_inputs <- anchor_inputs
-        tmp_inputs$spawner_goal <- goal
-        
-        find_smallest_feasible_anchor(
-          anchor_inputs = tmp_inputs,
-          accounting_params = accounting_params,
-          start_est = start_est
-        )
-      }
-    )
-  )
-}
-
-test_spawner_goal <- seq(100, 2000, by = 50)
-
-test_anchor_results <- evaluate_anchor_spawner_goal(
-  spawner_goals = test_spawner_goal,
-  anchor_inputs = anchor_inputs,
-  accounting_params = accounting_params
-)
-
-# Fit linear model
-fit <- lm(anchor ~ spawner_goal, data = test_anchor_results)
-
-coefs <- coef(fit)
-r2 <- summary(fit)$r.squared
-
-eqn <- sprintf(
-  "Anchor = %.2f + %.3f × Spawner Goal\nR² = %.3f",
-  coefs[1], coefs[2], r2
-)
-
-ggplot(test_anchor_results,
-       aes(x = spawner_goal, y = anchor)) +
-  geom_line(linewidth = 1.2) +
-  geom_point(size = 2) +
-  geom_smooth(method = "lm",
-              se = FALSE,
-              linetype = 2,
-              colour = "red") +
-  annotate(
-    "label",
-    x = min(test_anchor_results$spawner_goal),
-    y = max(test_anchor_results$anchor),
-    hjust = 0,
-    vjust = 1,
-    label = eqn,
-    size = 5
-  ) +
-  labs(
-    x = "Spawner Goal",
-    y = "Minimum Feasible NO Anchor",
-    title = "Sensitivity of Anchor to Spawner Goal"
-  ) +
-  theme_bw()
-
-#----------- back to Kyle's
 anchor_at_solution <- anchor_eval(
   est = anchor_required_no,
   anchor_inputs = anchor_inputs,

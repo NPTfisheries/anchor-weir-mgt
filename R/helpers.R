@@ -32,3 +32,210 @@ pick_actual_or_median <- function(actual_value, median_value, actual_label, medi
     list(value = median_value, source = median_label)
   }
 }
+
+evaluate_anchor_spawner_goal <- function(
+    spawner_goals,
+    anchor_inputs,
+    accounting_params,
+    start_est = 0
+) {
+  
+  tibble(
+    spawner_goal = spawner_goals,
+    anchor = purrr::map_dbl(
+      spawner_goal,
+      function(goal) {
+        
+        tmp_inputs <- anchor_inputs
+        tmp_inputs$spawner_goal <- goal
+        
+        find_smallest_feasible_anchor(
+          anchor_inputs = tmp_inputs,
+          accounting_params = accounting_params,
+          start_est = start_est
+        )
+      }
+    )
+  )
+}
+
+
+create_scenario_inputs <- function(
+    no_manarea_est,
+    ho_manarea_est,
+    brood_need = 160,
+    spawner_goal = 800,
+    wl_scaling = 1.4,
+    utilization_no = 1,
+    utilization_ho = 1
+) {
+  
+  list(
+    no_manarea_est = as.numeric(no_manarea_est),
+    ho_manarea_est = as.numeric(ho_manarea_est),
+    brood_need = as.numeric(brood_need),
+    spawner_goal = as.numeric(spawner_goal),
+    wl_scaling = as.numeric(wl_scaling),
+    utilization_no = as.numeric(utilization_no),
+    utilization_ho = as.numeric(utilization_ho)
+  )
+}
+
+calculate_anchor_result <- function(
+    scenario_inputs,
+    anchor_inputs,
+    accounting_params,
+    start_est = 0
+) {
+  
+  ai <- anchor_inputs
+  
+  ai$brood_need <- scenario_inputs$brood_need
+  ai$spawner_goal <- scenario_inputs$spawner_goal
+  ai$wl_scaling <- scenario_inputs$wl_scaling
+  
+  anchor_required_no <- find_smallest_feasible_anchor(
+    anchor_inputs = ai,
+    accounting_params = accounting_params,
+    start_est = start_est
+  )
+  
+  anchor_evaluation <- anchor_eval(
+    est = anchor_required_no,
+    anchor_inputs = ai,
+    accounting_params = accounting_params
+  )
+  
+  list(
+    anchor_required_no = anchor_required_no,
+    brood_need = ai$brood_need,
+    spawner_goal = ai$spawner_goal,
+    wl_scaling = ai$wl_scaling,
+    full_anchor_solution = anchor_evaluation
+  )
+}
+
+run_accounting_scenario <- function(
+    scenario_inputs,
+    accounting_params,
+    anchor_inputs,
+    start_est = 0
+) {
+  
+  anchor_result <- calculate_anchor_result(
+    scenario_inputs = scenario_inputs,
+    anchor_inputs = anchor_inputs,
+    accounting_params = accounting_params,
+    start_est = start_est
+  )
+  
+  fishery_result <- calculate_scenario_fisheries(
+    scenario_inputs,
+    accounting_params,
+    anchor_result
+  )
+  
+  weir_result <- calculate_scenario_weir_accounting(
+    scenario_inputs,
+    accounting_params,
+    fishery_result
+  )
+  
+  pnob_slope_result <- calculate_pnob_slope(
+    scenario_inputs,
+    anchor_result
+  )
+  
+  brood_result <- allocate_final_brood(
+    scenario_inputs,
+    weir_result,
+    pnob_slope_result
+  )
+  
+  final_metrics <- calculate_final_spawners(
+    scenario_inputs,
+    accounting_params,
+    weir_result,
+    brood_result
+  )
+  
+  list(
+    scenario_inputs = scenario_inputs,
+    anchor_result = anchor_result,
+    fishery_result = fishery_result,
+    weir_result = weir_result,
+    pnob_slope_result = pnob_slope_result,
+    brood_result = brood_result,
+    final_metrics = final_metrics
+  )
+}
+
+tidy_accounting_result <- function(result) {
+  
+  ar <- result$anchor_result
+  fr <- result$fishery_result
+  br <- result$brood_result
+  fm <- result$final_metrics
+  
+  tibble(
+    anchor_required_no = ar$anchor_required_no,
+    
+    sport_NO_impact = fr$sport_no_impacts,
+    treaty_NO_impact = fr$treaty_no_impacts,
+    total_NO_impact =
+      fr$sport_no_impacts + fr$treaty_no_impacts,
+    
+    HO_sport_harvest = fr$ho_sport_harvest,
+    HO_treaty_harvest = fr$ho_treaty_harvest,
+    total_HO_harvest =
+      fr$ho_sport_harvest + fr$ho_treaty_harvest,
+    
+    NO_brood = br$no_brood_actual,
+    HO_brood = br$ho_brood_actual,
+    total_brood =
+      br$no_brood_actual + br$ho_brood_actual,
+    
+    HO_removed = fm$ho_captured_removed,
+    
+    NO_spawners = fm$no_spawners_total,
+    HO_spawners = fm$ho_spawners_total,
+    system_spawners = fm$system_spawners_total,
+    
+    pHOS = fm$phos,
+    pNOB = fm$pnob,
+    PNI = fm$pni
+  )
+}
+
+evaluate_accounting_scenario <- function(
+    no_manarea_est,
+    ho_manarea_est,
+    accounting_params,
+    anchor_inputs,
+    brood_need = 160,
+    spawner_goal = 800,
+    wl_scaling = 1.4,
+    utilization_no = 1,
+    utilization_ho = 1,
+    start_est = 0
+) {
+  
+  scenario_inputs <- create_scenario_inputs(
+    no_manarea_est = no_manarea_est,
+    ho_manarea_est = ho_manarea_est,
+    brood_need = brood_need,
+    spawner_goal = spawner_goal,
+    wl_scaling = wl_scaling,
+    utilization_no = utilization_no,
+    utilization_ho = utilization_ho
+  )
+  
+  result <- run_accounting_scenario(
+    scenario_inputs = scenario_inputs,
+    accounting_params = accounting_params,
+    anchor_inputs = anchor_inputs,
+    start_est = start_est
+  )
+  
+  tidy_accounting_result(result)
+}

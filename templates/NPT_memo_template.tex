@@ -1,0 +1,314 @@
+\documentclass[$if(fontsize)$$fontsize$$else$11pt$endif$,letterpaper]{article}
+
+% ---------- Encoding, fonts, layout ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+$if(fontfamily)$
+  \usepackage{$fontfamily$}
+$else$
+  \usepackage[default,tabular,lf]{sourcesanspro}
+  \usepackage[cmintegrals]{newtxsf}
+  \usepackage[italic,eulergreek]{mathastext}
+$endif$
+
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.15}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% ---------- Graphics & tables ----------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float} % <-- enables [H] float placement
+$if(tables)$
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
+$endif$
+
+% $if(csl-refs)$
+% % ---------- Pandoc citeproc / CSL support ----------
+% \providecommand{\citeproctext}{}
+% \providecommand{\citeproc}[2]{#2}
+% 
+% \newlength{\cslhangindent}
+% \setlength{\cslhangindent}{1.5em}
+% 
+% \newlength{\cslentryspacingunit}
+% \setlength{\cslentryspacingunit}{\parskip}
+% 
+% \newenvironment{CSLReferences}[2]
+% {%
+%   \begin{list}{}{%
+%     \setlength{\leftmargin}{0pt}%
+%     \setlength{\rightmargin}{0pt}%
+%     \setlength{\labelwidth}{0pt}%
+%     \setlength{\labelsep}{0pt}%
+%     \setlength{\itemindent}{0pt}%
+%     \setlength{\listparindent}{0pt}%
+%     \setlength{\parsep}{0pt}%
+%     \setlength{\topsep}{0pt}%
+%     \setlength{\itemsep}{#2\cslentryspacingunit}%
+%     \ifodd#1%
+%       \setlength{\leftmargin}{\cslhangindent}%
+%       \setlength{\itemindent}{-\cslhangindent}%
+%     \fi%
+%   }%
+% }
+% {%
+%   \end{list}%
+% }
+% 
+% \providecommand{\CSLBlock}[1]{#1\hfill\break}
+% \providecommand{\CSLLeftMargin}[1]{%
+%   \parbox[t]{\cslhangindent}{#1}}
+% \providecommand{\CSLRightInline}[1]{%
+%   \parbox[t]{\dimexpr\linewidth-\cslhangindent\relax}{#1}}
+% \providecommand{\CSLIndent}[1]{%
+%   \hspace{\cslhangindent}#1}
+% $endif$
+
+% ---------- Links ----------
+\usepackage{xcolor}
+\definecolor{linkblue}{rgb}{0.0,0.2,0.6}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=linkblue,
+  citecolor=linkblue,
+  urlcolor=linkblue,
+  breaklinks=true,
+  pdftitle={$title$},
+  pdfauthor={$for(author)$$author.name$$sep$; $endfor$}
+}
+\urlstyle{same}
+
+% ---------- Header / footer ----------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+% Use shorttitle from YAML; fall back to full title if not provided
+\newcommand{\ShortTitleText}{$if(shorttitle)$$shorttitle$$else$$title$$endif$}
+
+% Default (all pages except the first): short title on the left, page number right
+\lhead{\textsf{\ShortTitleText}}
+\rhead{\textsf{\thepage}}
+\setlength{\headheight}{15pt}
+\renewcommand{\headrulewidth}{0.4pt}  % horizontal rule ON for subsequent pages
+
+% First-page style: NO header rule, NO page number
+\fancypagestyle{firstpage}{
+  \fancyhf{}                 % clear header/footer
+  \renewcommand{\headrulewidth}{0pt} % remove the line on first page
+}
+
+% ---------- Section titles (valid separation lengths) ----------
+% ---------- Section titles (unnumbered) ----------
+\setcounter{secnumdepth}{0}  % do not number sections at all
+
+\usepackage[compact,sf,bf]{titlesec}
+\titleformat{\section}[block]{\Large\bfseries\sffamily}{}{0.6em}{}        % no \thesection
+\titleformat{\subsection}[block]{\normalsize\bfseries\sffamily}{}{0.5em}{} % no \thesubsection
+\titleformat{\subsubsection}[block]{\normalsize\bfseries\sffamily}{}{0.5em}{}
+
+\titlespacing{\section}{0pt}{*2}{*0.6}
+\titlespacing{\subsection}{0pt}{*1.2}{*0.4}
+\titlespacing{\subsubsection}{0pt}{*1.0}{*0.3}
+
+
+% ---------- Captions ----------
+\usepackage{caption}
+\DeclareCaptionStyle{italic}[justification=raggedright,singlelinecheck=false]{labelfont={bf},textfont={it},labelsep=colon}
+\captionsetup[figure]{style=italic,format=hang}
+\captionsetup[table]{style=italic,format=hang}
+
+% ---------- BibLaTeX (enabled only if bibliography is provided) ----------
+$if(bibliography)$
+\usepackage[style=authoryear-comp,backend=biber,natbib=true,maxnames=3]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+
+% ---------- BibLaTeX (enabled only if bibliography is provided) ----------
+% Configure BibLaTeX for American Fisheries Society (AFS) style
+% \PassOptionsToPackage{
+%   backend=biber,     % Core processing engine
+%   style=authoryear,  % Author-Year format
+%   maxcitenames=2,    % Use 'et al.' for more than 2 authors in text
+%   maxbibnames=99,    % List all authors in the bibliography
+%   uniquename=false,  % Turn off initials for conflicting last names
+%   uniquelist=false
+% }{biblatex}
+% 
+% % AFS Specific Tweaks:
+% \AtBeginDocument{
+%   % Remove the comma between Author and Year in text citations: e.g., (Kinzer 2026)
+%   \DeclareDelimFormat{nameyeardelim}{\addspace} 
+%   
+%   % Separate multiple entries with semicolons: e.g., (Kinzer 2026; Briggs 2025)
+%   \DeclareDelimFormat{multicitedelim}{\addsemicolon\space}
+% }
+
+
+% ---------- Optional watermark ----------
+$if(memo_confidential)$
+\usepackage{draftwatermark}
+\SetWatermarkText{$memo_confidential$}
+\SetWatermarkScale{0.9}
+\SetWatermarkColor[gray]{0.9}
+$endif$
+
+% ---------- tcolorbox (memo header + callouts) ----------
+\usepackage[most]{tcolorbox}
+\tcbset{boxrule=0.5pt,arc=2mm,left=6pt,right=6pt,top=6pt,bottom=6pt}
+
+% Executive Summary / Recommendations environments (optional)
+\newenvironment{execsum}{%
+  \begin{tcolorbox}[colback=blue!3,colframe=blue!50!black,title=\textbf{Executive Summary}]
+}{\end{tcolorbox}}
+
+\newenvironment{recs}{%
+  \begin{tcolorbox}[colback=green!3,colframe=green!40!black,title=\textbf{Recommendations}]
+}{\end{tcolorbox}}
+
+% ---------- Branding (logos), only if branding: yes ----------
+$if(branding)$
+\usepackage[absolute,overlay]{textpos}
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+$endif$
+
+% ---------- Memo header box ----------
+\newcommand{\MemoHeader}{%
+  $if(branding)$
+    \vspace*{2cm}% push content down if branding block is present
+  $endif$
+  \begin{tcolorbox}[colback=gray!5,colframe=gray!45,coltitle=black, center title, title=\textbf{Technical Memorandum}]
+    \begin{tabularx}{\textwidth}{@{}p{2.2cm} Y@{}}
+      \textbf{To} &
+        \begin{minipage}[t]{\linewidth}\raggedright
+          \setlength{\parindent}{0pt}%
+          $for(memo_to)$$memo_to$$sep$\\ $endfor$
+        \end{minipage}
+      \\
+      \textbf{From} &
+        \begin{minipage}[t]{\linewidth}\raggedright
+          \setlength{\parindent}{0pt}%
+          $for(author)$$author$$sep$\\ $endfor$
+        \end{minipage}
+      \\
+      $if(memo_cc)$
+      \textbf{CC} &
+        \begin{minipage}[t]{\linewidth}\raggedright
+          \setlength{\parindent}{0pt}%
+          $for(memo_cc)$$memo_cc$$sep$\\ $endfor$
+        \end{minipage}
+      \\
+      $endif$
+      \textbf{Date}    & $if(date)$$date$$else$\today$endif$ \\
+      \textbf{Subject} & $if(memo_subject)$$memo_subject$$else$$title$$endif$ \\
+      $if(memo_project)$\textbf{Project} & $memo_project$ \\$endif$
+      $if(memo_id)$\textbf{Memo ID} & $memo_id$ \\$endif$
+    \end{tabularx}
+  \end{tcolorbox}
+}
+
+
+% ---------- Title metadata ----------
+$if(subtitle)$
+  \title{$title$\\[0.5em]\large $subtitle$}
+$else$
+  \title{$title$}
+$endif$
+
+$if(anonymous)$
+  \author{}
+$else$
+  \author{%
+    $for(author)$
+      \textbf{$author.name$}$if(author.title)$, \emph{$author.title$}$endif$$if(author.affil)$\textsuperscript{$author.affil$}$endif$\\
+    $endfor$
+    $if(affiliations)$
+      $for(affiliations)$
+        \textsuperscript{$affiliations.id$}$if(affiliations.id)$ $endif$ $affiliations.name$\\
+      $endfor$
+    $endif$
+  }
+$endif$
+
+\date{$if(date)$$date$$else$\today$endif$}
+
+% --- Pandoc tight list shim (prevents \tightlist error) ---
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% -------------------- BODY --------------------
+\begin{document}
+
+% Branding logos (optional)
+$if(branding)$
+  \begin{textblock}{3}(1,1.1)\includegraphics[height=2.0cm]{../templates/NPT.png}\end{textblock}
+   \begin{textblock}{14}(3.75,0.5)
+      \begin{center}
+        {\LARGE Nez Perce Tribe}\\[0.1em]
+        {\bfseries\Large Department of Fisheries Resources Management}\\[0.1em]
+        {\bfseries\footnotesize Administration \textbullet Enforcement \textbullet Habitat/Watershed \textbullet Harvest \textbullet Production \textbullet Research}\\[0.1em]
+        {\bfseries\normalsize Research Division}\\[0.1em]
+        {\footnotesize P.O. Box 365 \textbullet Lapwai, Idaho 83540}\\[0.1em]
+        {\footnotesize Phone: (208) 843-7145 \textbullet Fax: (208) 843-7310}\\[0.1em]        
+      \end{center}
+    \end{textblock}
+  \begin{textblock}{3}(19,1.1)\includegraphics[height=2.0cm]{../templates/DFRM.png}\end{textblock}
+$endif$
+
+% (Small title for PDF metadata clarity)
+{\large\bfseries\sffamily $title$}\par\vspace{0.4em}
+
+% Make the FIRST page clean: no line, no page number
+\thispagestyle{firstpage}
+
+% Memo header
+\MemoHeader
+
+% Optional Executive Summary / Recommendations if provided via variables
+$if(executive_summary)$
+\begin{execsum}
+$executive_summary$
+\end{execsum}
+$endif$
+
+$if(recommendations)$
+\begin{recs}
+$recommendations$
+\end{recs}
+$endif$
+
+% Content injection hooks
+$for(include-before)$
+$include-before$
+$endfor$
+
+$body$
+
+% References (only if bibliography present)
+$if(bibliography)$
+\section*{References}
+\printbibliography[heading=none]
+$endif$
+
+$for(include-after)$
+$include-after$
+$endfor$
+
+\end{document}

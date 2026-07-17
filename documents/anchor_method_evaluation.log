@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.27)  17 JUL 2026 10:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.27)  17 JUL 2026 16:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1240,7 +1240,7 @@ Package biblatex Info: ... file 'anchor_method_evaluation.bbl' found.
 Package biblatex Info: Reference section=0 on input line 182.
 Package biblatex Info: Reference segment=0 on input line 182.
 \c@lstlisting=\count502
-<../templates/NPT.png, id=160, 110.814pt x 108.405pt>
+<../templates/NPT.png, id=167, 110.814pt x 108.405pt>
 File: ../templates/NPT.png Graphic file (type png)
 <use ../templates/NPT.png>
 Package pdftex.def Info: ../templates/NPT.png  used on input line 185.
@@ -1263,7 +1263,7 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.0pt on input line 192.
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.0pt on input line 192.
-<../templates/DFRM.png, id=162, 102.6234pt x 102.6234pt>
+<../templates/DFRM.png, id=169, 102.6234pt x 102.6234pt>
 File: ../templates/DFRM.png Graphic file (type png)
 <use ../templates/DFRM.png>
 Package pdftex.def Info: ../templates/DFRM.png  used on input line 196.
@@ -1300,7 +1300,7 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
 (Font)              scaled to size 11.28003pt on input line 241.
 [2]
-<anchor_method_evaluation_files/figure-latex/current-framework-1.pdf, id=186, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/current-framework-1.pdf, id=193, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/current-framework-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/current-framework-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/current-framework-1.pdf  used on input line 251.
@@ -1310,7 +1310,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/current-fra
 [3]
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
 (Font)              scaled to size 11.28003pt on input line 258.
-<./fmep_harvest_impacts.png, id=191, 584.1825pt x 485.56406pt>
+<./fmep_harvest_impacts.png, id=198, 584.1825pt x 485.56406pt>
 File: ./fmep_harvest_impacts.png Graphic file (type png)
 <use ./fmep_harvest_impacts.png>
 Package pdftex.def Info: ./fmep_harvest_impacts.png  used on input line 268.
@@ -1320,7 +1320,7 @@ Package pdftex.def Info: ./fmep_harvest_impacts.png  used on input line 268.
 [4 <./anchor_method_evaluation_files/figure-latex/current-framework-1.pdf>]
 
 [5 <./fmep_harvest_impacts.png>]
-<./lostine_sliding_scale.png, id=207, 475.02469pt x 232.61906pt>
+<./lostine_sliding_scale.png, id=214, 475.02469pt x 232.61906pt>
 File: ./lostine_sliding_scale.png Graphic file (type png)
 <use ./lostine_sliding_scale.png>
 Package pdftex.def Info: ./lostine_sliding_scale.png  used on input line 291.
@@ -1355,7 +1355,7 @@ Package hyperref Warning: The anchor of a bookmark and its parent's must not
 [10]
 
 [11] [12]
-<anchor_method_evaluation_files/figure-latex/calc-anchor-range-1.pdf, id=258, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/calc-anchor-range-1.pdf, id=265, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/calc-anchor-range-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/calc-anchor-range-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/calc-anchor-range-1.pdf  used on input line 506.
@@ -1363,12 +1363,12 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/calc-anchor
 
 
 [13]
-<./odfw_prod_curves.png, id=266, 1199.23032pt x 294.34969pt>
+<./odfw_prod_curves.png, id=273, 1199.23032pt x 294.34969pt>
 File: ./odfw_prod_curves.png Graphic file (type png)
 <use ./odfw_prod_curves.png>
 Package pdftex.def Info: ./odfw_prod_curves.png  used on input line 515.
 (pdftex.def)             Requested size: 469.75502pt x 115.29893pt.
-<../../Chinook-Life-Cycle/figures/plot-smolt-1.png, id=267, 505.89pt x 361.35pt>
+<../../Chinook-Life-Cycle/figures/plot-smolt-1.png, id=274, 505.89pt x 361.35pt>
 File: ../../Chinook-Life-Cycle/figures/plot-smolt-1.png Graphic file (type png)
 <use ../../Chinook-Life-Cycle/figures/plot-smolt-1.png>
 Package pdftex.def Info: ../../Chinook-Life-Cycle/figures/plot-smolt-1.png  used on input line 524.
@@ -1378,7 +1378,7 @@ Package pdftex.def Info: ../../Chinook-Life-Cycle/figures/plot-smolt-1.png  used
 [14 <./anchor_method_evaluation_files/figure-latex/calc-anchor-range-1.pdf> <./odfw_prod_curves.png>]
 
 [15 <../../Chinook-Life-Cycle/figures/plot-smolt-1.png>]
-<anchor_method_evaluation_files/figure-latex/annual-comparison-1.pdf, id=285, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/annual-comparison-1.pdf, id=292, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/annual-comparison-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/annual-comparison-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/annual-comparison-1.pdf  used on input line 549.
@@ -1393,7 +1393,7 @@ Package hyperref Warning: The anchor of a bookmark and its parent's must not
 
 Package hyperref Warning: Suppressing empty link on input line 562.
 
-<anchor_method_evaluation_files/figure-latex/treaty-harvest-decision-1.pdf, id=293, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/treaty-harvest-decision-1.pdf, id=300, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/treaty-harvest-decision-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/treaty-harvest-decision-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/treaty-harvest-decision-1.pdf  used on input line 566.
@@ -1401,7 +1401,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/treaty-harv
 
 
 [17 <./anchor_method_evaluation_files/figure-latex/annual-comparison-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/treaty-harvest-1.pdf, id=305, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/treaty-harvest-1.pdf, id=312, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/treaty-harvest-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/treaty-harvest-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/treaty-harvest-1.pdf  used on input line 575.
@@ -1409,7 +1409,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/treaty-harv
 
 
 [18 <./anchor_method_evaluation_files/figure-latex/treaty-harvest-decision-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/nor-treaty-impacts-1.pdf, id=321, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/nor-treaty-impacts-1.pdf, id=328, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/nor-treaty-impacts-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/nor-treaty-impacts-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/nor-treaty-impacts-1.pdf  used on input line 584.
@@ -1417,7 +1417,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/nor-treaty-
 
 
 [19 <./anchor_method_evaluation_files/figure-latex/treaty-harvest-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/total-spawners-sensitivity-1.pdf, id=343, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/total-spawners-sensitivity-1.pdf, id=351, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/total-spawners-sensitivity-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/total-spawners-sensitivity-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/total-spawners-sensitivity-1.pdf  used on input line 597.
@@ -1425,7 +1425,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/total-spawn
 
 
 [20 <./anchor_method_evaluation_files/figure-latex/nor-treaty-impacts-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/hor-removals-decision-1.pdf, id=364, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/hor-removals-decision-1.pdf, id=371, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/hor-removals-decision-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/hor-removals-decision-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/hor-removals-decision-1.pdf  used on input line 606.
@@ -1433,7 +1433,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/hor-removal
 
 
 [21 <./anchor_method_evaluation_files/figure-latex/total-spawners-sensitivity-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/hor-removals-1.pdf, id=381, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/hor-removals-1.pdf, id=388, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/hor-removals-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/hor-removals-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/hor-removals-1.pdf  used on input line 615.
@@ -1441,7 +1441,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/hor-removal
 
 
 [22 <./anchor_method_evaluation_files/figure-latex/hor-removals-decision-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/phos-sensitivity-1.pdf, id=397, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/phos-sensitivity-1.pdf, id=404, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/phos-sensitivity-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/phos-sensitivity-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/phos-sensitivity-1.pdf  used on input line 624.
@@ -1452,7 +1452,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/phos-sensit
 
 Package hyperref Warning: Suppressing empty link on input line 633.
 
-<anchor_method_evaluation_files/figure-latex/pnob-sensitivity-1.pdf, id=416, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/pnob-sensitivity-1.pdf, id=423, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/pnob-sensitivity-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/pnob-sensitivity-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/pnob-sensitivity-1.pdf  used on input line 637.
@@ -1460,7 +1460,7 @@ Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/pnob-sensit
 
 
 [24 <./anchor_method_evaluation_files/figure-latex/phos-sensitivity-1.pdf>]
-<anchor_method_evaluation_files/figure-latex/pni-sensitivity-1.pdf, id=434, 469.755pt x 325.215pt>
+<anchor_method_evaluation_files/figure-latex/pni-sensitivity-1.pdf, id=441, 469.755pt x 325.215pt>
 File: anchor_method_evaluation_files/figure-latex/pni-sensitivity-1.pdf Graphic file (type pdf)
 <use anchor_method_evaluation_files/figure-latex/pni-sensitivity-1.pdf>
 Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/pni-sensitivity-1.pdf  used on input line 646.
@@ -1477,51 +1477,61 @@ Package hyperref Warning: The anchor of a bookmark and its parent's must not
 [26 <./anchor_method_evaluation_files/figure-latex/pni-sensitivity-1.pdf>]
 
 [27]
-Overfull \hbox (11.86497pt too wide) in alignment at lines 738--743
- [] [] [] [] 
- []
-
-
-Overfull \hbox (11.86497pt too wide) in alignment at lines 743--748
- [] [] [] [] 
- []
-
-
-Overfull \hbox (11.86497pt too wide) in alignment at lines 748--750
- [] [] [] [] 
- []
-
-
-Overfull \hbox (11.86497pt too wide) in alignment at lines 750--752
- [] [] [] [] 
- []
-
-
-Overfull \hbox (11.86497pt too wide) in alignment at lines 752--757
- [] [] [] [] 
- []
-
+<anchor_method_evaluation_files/figure-latex/hsrg-management-matrix-1.pdf, id=486, 469.755pt x 325.215pt>
+File: anchor_method_evaluation_files/figure-latex/hsrg-management-matrix-1.pdf Graphic file (type pdf)
+<use anchor_method_evaluation_files/figure-latex/hsrg-management-matrix-1.pdf>
+Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/hsrg-management-matrix-1.pdf  used on input line 721.
+(pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 
 
 [28]
 
-[29]
-<anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf, id=485, 469.755pt x 325.215pt>
-File: anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf Graphic file (type pdf)
-<use anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf>
-Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf  used on input line 795.
+[29 <./anchor_method_evaluation_files/figure-latex/hsrg-management-matrix-1.pdf>]
+<anchor_method_evaluation_files/figure-latex/proposed-management-matrix-1.pdf, id=502, 469.755pt x 325.215pt>
+File: anchor_method_evaluation_files/figure-latex/proposed-management-matrix-1.pdf Graphic file (type pdf)
+<use anchor_method_evaluation_files/figure-latex/proposed-management-matrix-1.pdf>
+Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/proposed-management-matrix-1.pdf  used on input line 753.
 (pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 
 
-[30]
+[30 <./anchor_method_evaluation_files/figure-latex/proposed-management-matrix-1.pdf>]
 
-[31 <./anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf>]
+[31]
+<anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf, id=524, 469.755pt x 325.215pt>
+File: anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf Graphic file (type pdf)
+<use anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf>
+Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf  used on input line 800.
+(pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 
-[32]
+
+[32 <./anchor_method_evaluation_files/figure-latex/plot-pni-surface-1.pdf>]
 
 [33]
 
-[34] (./anchor_method_evaluation.aux)
+[34]
+<anchor_method_evaluation_files/figure-latex/compare-pni-1.pdf, id=544, 469.755pt x 325.215pt>
+File: anchor_method_evaluation_files/figure-latex/compare-pni-1.pdf Graphic file (type pdf)
+<use anchor_method_evaluation_files/figure-latex/compare-pni-1.pdf>
+Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/compare-pni-1.pdf  used on input line 875.
+(pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
+<anchor_method_evaluation_files/figure-latex/pni-diff-1.pdf, id=545, 469.755pt x 325.215pt>
+File: anchor_method_evaluation_files/figure-latex/pni-diff-1.pdf Graphic file (type pdf)
+<use anchor_method_evaluation_files/figure-latex/pni-diff-1.pdf>
+Package pdftex.def Info: anchor_method_evaluation_files/figure-latex/pni-diff-1.pdf  used on input line 884.
+(pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
+
+
+[35 <./anchor_method_evaluation_files/figure-latex/compare-pni-1.pdf>]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/sc' will be
+(Font)              scaled to size 12.0pt on input line 893.
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/ntxtlf/m/sc/12'.
+(microtype)             Ignoring protrusion settings for this character.
+
+
+[36{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf-pc.enc} <./anchor_method_evaluation_files/figure-latex/pni-diff-1.pdf>]
+
+[37] (./anchor_method_evaluation.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1530,24 +1540,24 @@ L3 programming layer <2020/03/25>
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `anchor_method_evaluation.out' has not changed.
-(rerunfilecheck)             Checksum: 4F428BCC831CF94967FBDA3FE632CA71;6703.
+(rerunfilecheck)             Checksum: A04551A1923A2FAD087D1B135B5D3E8D;7238.
 Package logreq Info: Writing requests to 'anchor_method_evaluation.run.xml'.
 \openout1 = `anchor_method_evaluation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 42783 strings out of 469728
- 848524 string characters out of 5475651
- 1682627 words of memory out of 5000000
- 70326 multiletter control sequences out of 15000+600000
- 704755 words of font info for 194 fonts, out of 8000000 for 9000
+ 42863 strings out of 469728
+ 852288 string characters out of 5475651
+ 1683435 words of memory out of 5000000
+ 70388 multiletter control sequences out of 15000+600000
+ 708215 words of font info for 199 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 98i,13n,117p,1377b,2102s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,13n,117p,1377b,2024s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/NewTXMI.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qhvb.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qhvr.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qtmb.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qtmr.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txexs.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txmiaX.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txsys.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmb.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmr.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmri.pfb>
-Output written on anchor_method_evaluation.pdf (34 pages, 942807 bytes).
+Output written on anchor_method_evaluation.pdf (37 pages, 1014447 bytes).
 PDF statistics:
- 590 PDF objects out of 1000 (max. 8388607)
- 401 compressed objects within 5 object streams
- 80 named destinations out of 1000 (max. 500000)
- 43004 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 660 PDF objects out of 1000 (max. 8388607)
+ 457 compressed objects within 5 object streams
+ 88 named destinations out of 1000 (max. 500000)
+ 45088 words of extra memory for PDF output out of 51595 (max. 10000000)
 

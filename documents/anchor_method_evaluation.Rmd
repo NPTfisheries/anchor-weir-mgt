@@ -1119,7 +1119,7 @@ Collectively, these results demonstrate that the Anchor Method responds continuo
 
 # Objective 4: Expanding the HSRG Recovery Framework
 
-The Hatchery Scientific Review Group (HSRG) developed a biological framework for integrating hatchery, harvest, habitat, and hydrosystem management within salmon recovery planning. Rather than viewing hatchery reform as a fixed management strategy, the HSRG recommends that hatchery objectives evolve as populations recover. Management actions should therefore reflect both the biological significance of a population to recovery of the Evolutionarily Significant Unit (ESU) and its current stage of biological recovery [@hsrg_implementation_2017; @hsrg_developing_2020].
+The Hatchery Scientific Review Group (HSRG) developed a biological framework for integrating hatchery, harvest, habitat, and hydrosystem management within salmon recovery planning [@hsrg_implementation_2017]. Rather than viewing hatchery reform as a fixed management strategy, the HSRG recommends that hatchery objectives evolve as populations recover. Management actions should therefore reflect both the biological significance of a population to recovery of the Evolutionarily Significant Unit (ESU) and its current stage of biological recovery [@hsrg_implementation_2017].
 
 ## Population Significance
 
@@ -1138,11 +1138,11 @@ Independent of population significance, the HSRG recognizes four biological reco
 * **Local Adaptation** – increase natural productivity, reproductive success, and life-history diversity while progressively reducing hatchery influence.
 * **Full Restoration** – maintain viable, naturally self-sustaining populations that satisfy all Viable Salmonid Population (VSP) parameters through adaptive management.
 
-Rather than prescribing fixed abundance criteria, the HSRG recommends that transitions between recovery phases be based on biological triggers that may include abundance, productivity, habitat conditions, spatial structure, and diversity. These triggers should be developed specifically for each population and refined as additional biological information becomes available.
+Rather than prescribing fixed criteria, the HSRG recommends developing triggers that transition between recovery phases based on biological indicators that may include abundance, productivity, habitat conditions, spatial structure, and diversity. These triggers should be developed specifically for each population and refined as additional biological information becomes available.
 
 ## Proposed Recovery Phase Thresholds
 
-Although the HSRG framework provides a biologically sound conceptual approach, it does not establish standardized quantitative criteria for assigning populations to recovery phases. We propose adopting abundance-based thresholds to provide a transparent and repeatable method for classifying populations while remaining consistent with the HSRG emphasis on biological triggers.
+Although the HSRG framework provides a biologically sound conceptual approach, it does not establish standardized quantitative criteria for assigning populations to recovery phases. We propose adopting abundance-based thresholds to provide a transparent and repeatable method for classifying populations while remaining consistent with the HSRG emphasis on biological triggers [@hsrg_developing_2020].
 
 Specifically, we propose the following operational thresholds:
 
@@ -1159,7 +1159,104 @@ During the **Preservation** and **Recolonization** phases, no formal pHOS or PNI
 
 As populations transition into the **Local Adaptation** and **Full Restoration** phases, management emphasis shifts toward reducing hatchery influence and promoting local adaptation. At this stage, broodstock and natural spawning are managed to satisfy pHOS and PNI objectives that vary according to population significance.
 
+Numeric guidelines for pHOS and PNI managment targets were developed to balance genetic and demographic concerns [@hsrg_implementation_2017]. Generally, management targets shift from allowing more HOR fish to spawn naturally and into the brood stock, to a more stringent approach seeking to reduce HOR influence on the population (Table \@ref(fig:hsrg-management-matrix)).
+
+```{r hsrg-management-matrix, fig.cap = 'HSRG recommended hatchery weir management framework based on biological recovery phase and population significance.'}
+management_matrix <- tibble::tribble(
+  ~`Recovery Phase`,  ~Stabilizing, ~Contributing, ~Primary, 
+  "Preservation",
+  "no specific pHOS or PNI recommendations, use as many natural-origin brood as possible, allow remaining hatchery-origin fish to spawn naturally",
+  "Same",
+  "Same",
+  
+  "Recolonization",
+  "no specific pHOS or PNI recommendations, encouraged to use some NOR brood (perhaps 10-30%), HOR can spawn naturally",
+  "Same",
+  "Same",
+  
+  "Local Adaptation",
+  "Integrated and Segregated programs: maintian or improve upon current pHOS and PNI levels", 
+  "Integrated programs: PNI > 0.50, pHOS < 30%, Segregated programs: pHOS < 10%",
+  "Integrated programs: PNI > 0.67, pHOS < 30%, Segregated programs: pHOS < 5%",
+
+
+  
+  "Full Restoration",
+  "Integrated and Segregated programs: maintian or improve upon current pHOS and PNI levels", 
+  "Integrated programs: PNI > 0.50, pHOS < 30%, Segregated programs: pHOS < 10%",
+  "Integrated programs: PNI > 0.67, pHOS < 30%, Segregated programs: pHOS < 5%"
+)
+
+management_long <-
+  management_matrix %>%
+  pivot_longer(
+    cols = c(Stabilizing, Contributing, Primary),
+    names_to = "Program",
+    values_to = "Recommendation"
+  ) %>%
+  mutate(
+    Program = factor(
+      Program,
+      levels = c("Stabilizing", "Contributing", "Primary")
+    ),
+    `Recovery Phase` = factor(
+      `Recovery Phase`,
+      levels = c(
+        "Preservation",
+        "Recolonization",
+        "Local Adaptation",
+        "Full Restoration"
+      )
+    ),
+    fill = case_when(
+      str_detect(Recommendation, "no|Same") ~ "no",
+      str_detect(Recommendation, "improve") ~ "improve",
+      str_detect(Recommendation, "0.50") ~ "PNI50",
+      str_detect(Recommendation, "0.67") ~ "PNI67"
+    )
+  ) %>%
+    mutate(
+    Recommendation = stringr::str_wrap(Recommendation, width = 25)
+  )
+
+ggplot(
+  management_long,
+  aes(
+    x = Program,
+    y = `Recovery Phase`
+  )
+) +
+  geom_tile(aes(fill = fill), color = "grey70") +
+  geom_text(
+    aes(label = Recommendation),
+    size = 3,
+    lineheight = 0.9
+  ) +
+  scale_x_discrete(position = "top") +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(
+    values = c(
+      PNI67 = "#4575B4",
+      PNI50 = "#91CF60",
+      improve = "#FEE08B",
+      no = "#D73027"
+    ),
+    guide = "none"
+  ) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_text(face = "bold"),
+    axis.text.y = element_text(face = "bold"),
+    axis.ticks = element_blank()
+  ) 
+```
+
+
 ## Proposed Two-Dimensional Decision Framework
+
+Guidelines, however, were not unique for each population significance and recovery phase .   
 
 The HSRG framework considers population significance and biological recovery as complementary concepts. However, current broodstock recommendations primarily depend on population significance once populations reach the Local Adaptation phase. We propose integrating both designations into a single management framework.
 
@@ -1174,104 +1271,119 @@ The proposed framework provides managers with greater flexibility to balance har
 
 ## Example Management Matrix
 
-```{r management-matrix, tab.cap = 'Example two-dimensional hatchery-management framework based on biological recovery phase and population significance.'}
+```{r proposed-management-matrix, fig.cap = 'Proposed Example two-dimensional hatchery-management framework based on biological recovery phase and population significance.'}
 management_matrix <- tibble::tribble(
-  ~`Recovery Phase`, ~Primary, ~Contributing, ~Stabilizing,
+  ~`Recovery Phase`, ~Abundance,  ~Stabilizing, ~Contributing, ~Primary, 
   "Preservation",
-  "Maximize natural production; use available NOR broodstock; allow most HOR to spawn naturally",
-  "Same",
-  "Same",
+  "< 30% MAT (Critical)",
+  "no specific pHOS or PNI recommendations",
+  "no specific pHOS or PNI recommendations",
+  "no specific pHOS or PNI recommendations",
   
   "Recolonization",
-  "Increase abundance while expanding NOR broodstock",
-  "Increase abundance",
-  "Maintain viability",
+  "30% MAT - MAT (CBP Low Goal)",
+  "encouraged to use some NOR brood (perhaps 10-30%), HOR can spawn naturally",
+  "encouraged to use some NOR brood (perhaps 10-30%), HOR can spawn naturally",
+  "encouraged to use some NOR brood (perhaps 10-30%), HOR can spawn naturally",
   
   "Local Adaptation",
-  "Increase pNOB and reduce pHOS; emphasize local adaptation",
-  "Moderate pNOB and pHOS objectives",
-  "Maintain current conditions unless population improves",
-  
+  "MAT - 4.0 * MAT (CBP High Goal)",
+  "encouraged to use some NOR brood (perhaps 10-30%), HOR can spawn naturally",
+  "PNI > 0.62, pHOS < 30%; requires pNOB > 50%",
+  "PNI > 0.62, pHOS < 30%; requires pNOB > 50%",
+
   "Full Restoration",
-  "Strict PNI and pHOS objectives; adaptive management",
-  "Moderate PNI and pHOS objectives",
-  "Long-term maintenance"
+  "> 4.0 * MAT",
+  "encouraged to use some NOR brood (perhaps 10-30%), HOR can spawn naturally",
+  "PNI > 0.62, pHOS < 30%; requires pNOB > 50%",
+  "PNI > 0.67, pHOS < 30%; requires pNOB > 60%"
 )
 
-knitr::kable(
-  management_matrix,
-  booktabs = TRUE,
-  longtable = TRUE
-) %>%
-  kableExtra::column_spec(1, width = "1.5in") %>%
-  kableExtra::column_spec(2, width = "1.5in") %>%
-  kableExtra::column_spec(3, width = "1.5in") %>%
-  kableExtra::column_spec(4, width = "1.5in") %>%
-  kableExtra::kable_styling(
-    latex_options = c("repeat_header"),
-    full_width = FALSE
-  ) 
+management_long <-
+  management_matrix %>%
+  mutate(
+    Phase = paste0(
+      `Recovery Phase`,
+      "\n(",
+      Abundance,
+      ")"
+    )
+  ) %>%
+  pivot_longer(
+    cols = c(Stabilizing, Contributing, Primary),
+    names_to = "Program",
+    values_to = "Recommendation"
+  ) %>%
+  mutate(
+    Program = factor(
+      Program,
+      levels = c("Stabilizing", "Contributing", "Primary")
+    ),
+    Phase = factor(
+      Phase,
+      levels = c(
+        "Preservation\n(< 30% MAT (Critical))",
+        "Recolonization\n(30% MAT - MAT (CBP Low Goal))",
+        "Local Adaptation\n(MAT - 4.0 * MAT (CBP High Goal))",
+        "Full Restoration\n(> 4.0 * MAT)"
+      )
+    ),
+    fill = case_when(
+      str_detect(Recommendation, "0.67") ~ "PNI67",
+      str_detect(Recommendation, "0.62") ~ "PNI62",
+      str_detect(Recommendation, "^encouraged") ~ "Encouraged",
+      str_detect(Recommendation, "^no specific") ~ "None"
+    )
+  ) %>%
+    mutate(
+    Recommendation = stringr::str_wrap(Recommendation, width = 25)
+  )
+
+ggplot(
+  management_long,
+  aes(
+    x = Program,
+    y = Phase
+  )
+) +
+  geom_tile(aes(fill = fill), color = "grey70") +
+  geom_text(
+    aes(label = Recommendation),
+    size = 3,
+    lineheight = 0.9
+  ) +
+  scale_x_discrete(position = "top") +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(
+    values = c(
+      PNI67 = "#4575B4",
+      PNI62 = "#91CF60",
+      Encouraged = "#FEE08B",
+      None = "#D73027"
+    ),
+    guide = "none"
+  ) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_text(face = "bold"),
+    axis.text.y = element_text(face = "bold"),
+    axis.ticks = element_blank()
+  )
+
 ```
 
 The specific broodstock composition, pHOS, PNI, and harvest objectives associated with each cell of the matrix should be developed collaboratively using population-specific biological information and adaptive management. Rather than prescribing fixed thresholds, the matrix provides a structured framework for integrating recovery status with population significance to guide hatchery management decisions.
 
 Overall, this approach extends the HSRG framework by explicitly recognizing that broodstock management should evolve continuously as populations recover. Integrating biological recovery phase with population significance provides managers with a more transparent and biologically defensible process for balancing conservation, harvest, and supplementation objectives while remaining consistent with the long-term goals of ESU recovery.
 
-<!-- HSRG's recovery phase recommendations for broodstock management vary depending on the biological significance of the population to the Evolutionary Significant Unit (ESU) [@hsrg_implementation_2017]. @hsrg_developing_2020 assists fisheries managegers with identifying recovery objectives and phase transition triggers. HSRG recommends classifying population significance into three categories: primary, contributing, and stabilizing. The categories are based on ESU recovery goals [@noaa_esa_2017] for achieving high, medium, and maintaining viability [@mcelhany_viable_2000]. -->
+## Application to North East Oregon Populations
 
-<!-- Population designation requirements include the following [@hsrg_developing_2020]. -->
-
-<!-- * Primary: populations must achieve high viability -->
-<!--   * high priority for recovery of the ESU and needs to be at low risk of extinction -->
-<!--   * historically a large component (i.e., abundance) or contained a unique genetic component of the ESU -->
-<!-- * Contributing: populations must achieve at least medium viability -->
-<!--   * second to primary populations in importance to ESU recovery -->
-<!--   * historically less abundant than primary, yet contributes to genetic and spatial diversity of the ESU -->
-<!-- * Stabilizing: populations must maintain at least current viability -->
-<!--   * important to the ESU and viability should not decline -->
-<!--   * small segment of the population, still contributes to genetic and spatial diveristy of the ESU -->
-
-<!-- Biological recovery phases include the following [@hsrg_developing_2020]. -->
-
-<!-- * Preservation: -->
-<!--   * Objective: prevent extinction, retain genetic diversity, increase productivity and abundance -->
-<!--   * Ecosystem Conditions: low population abundance, habitat either blocked or unable to support self-sustaining population -->
-<!-- * Recolonization: -->
-<!--   * Objective: re-populate suitable habitat either with pre-spawning adults or out-migrating smolts -->
-<!--   * Ecosystem Conditions: underutilized habitat, habitat may be expected to improve -->
-<!-- * Local Adaptation: -->
-<!--   * Objective: meet and exceed minimum VSP abundance for natural-origin spawners, increase fitness, reproductive sucess, and life-history diversity through local adaptation, (reduce hatchery influence by managing PNI) -->
-<!--   * Ecosystem Conditions: habitat capable of supporting abundances that minimize extinction risk, prevent loss of genetic diversity and promote life history diversity -->
-<!-- * Full Restoration: -->
-<!--   * Objective: maintain viable population, based on all viable salmonid population (VSP) parameters [@mcelhany_viable_2000] using long-term adaptive management -->
-<!--   * Ecosystem Conditions: habitat restored or stable and protected to allow full expression of abundance, productivity, life-history diversity, and spatial distribution -->
-
-<!-- We propose refining the biological recovery phase categories to include abundance thresholds to assist with classifying populations into a particular phase. The preservation phase could include populations below critical abundances, calculated as 30% of the ICTRT's minimum abundance threshold (MAT). The recolonization phase could include population with abundances between critical and the MAT. Where the MAT is also the minimum VSP abundance recommeded by @hsrg_developing_2020 for the transition into local adaptation. Populations considered to be in the full restoration phase would be meeting @cbp_vision_2020 medium and high abundance goals. for each Snake River population. The low abundance goal corresponds with the Interior Columbia River Technical Review Team's established minimum viability abundance thresholds (MAT), medium is 2.5 x MAT, and high is 4 x MAT. -->
-
-<!-- Based on the population designation and biological recovery phase @hsrg_developing_2020 further recommended management targets for pHOS and PNI. Preservation and recolonization phases were independent of population significance and did not include limitations to pHOS or PNI. Instead, @hsrg_developing_2020 encouraged hatchery managers to use as many NOR brood as possible and to allow all extra HOR fish to spawn naturally for populations in the preservation phase, for the recolonization phase managers were encouraged to use some NOR broodstock (10-30%) and allow most to spawn naturally. Local adaptation and full restoration recommendations were dependent on the population's significance designation and not the recovery phase; their pHOS and PNI guidelines are as follows: -->
-
-<!-- * Primary: -->
-<!--   * Integrated: PNI $\ge$ 0.67; pHOS $\le$ 30% -->
-<!--   * Segregated: pHOS $<$ 5% -->
-<!-- * Contributing: -->
-<!--   * Integrated: PNI $\ge$ 0.67; pHOS $\le$ 30% -->
-<!--   * Segregated: pHOS $<$ 5% -->
-<!-- * Stabilizing: -->
-<!--   * Integrated: PNI $\ge$ 0.67; pHOS $\le$ 30%  -->
-<!--   * Segregated: pHOS $<$ 5%  -->
-
-<!-- We recommend an approach that also considers the biological recover phase when setting broodstock and natural spawning targets for primary, contributing, and stabilizing populations. A tiered approach, dependent on both biologically meaningful designations, better meets the management objectives of individual hatchery programs, while providing better protection for population fitness, domestication, genetic loss and extirpation, while accounting for the importance of the population to ESU recovery.  -->
+The Imnaha River and Lostine River populations are considered primary populations with proposed recovery statuses of highly viable or low risk of extinction [@noaa_esa_2017; Table 4-1.]. The latest Endangered Species Act 5-year status review found the 10-year geometric mean abundances were above. quasi-extinction (50 spawners for four consecutive years) and tical thresholds (30% * Viability) yet still at a high extinction risk rating for both populations [@ford_biological_2022]. Thus, placing both populations in a biological recovery phase of recolonization, if you assume
 
 
-
-<!-- The Imnaha River and Lostine River populations are considered primary populations with proposed recovery statuses of highly viable or low risk of extinction [@noaa_esa_2017; Table 4-1.]. The latest Endangered Species Act 5-year status review found the 10-year geometric mean abundances were above. quasi-extinction (50 spawners for four consecutive years) and tical thresholds (30% * Viability) yet still at a high extinction risk rating for both populations [@ford_biological_2022]. Thus, placing both populations in a biological recovery phase of recolonization, if you assume   -->
-
-<!-- * HSRG 2020 - Developing Recovery Objectives and Phase Triggers fro Salmonid Populations -->
-<!--   * Primary, Contributing, and Stabilizing - Population designations (LCRFRC 2004) each have different management objectives -->
-<!--   * Biological Recovery Phases - Preservation, Recolonization, Local Adaptation, Full Restoration -->
-<!-- * HSRG 2017 - Framework paper -->
-
-# Objective 4: Parental-Adjusted Proportionate Natural Influence
+# Objective 5: Parental-Adjusted Proportionate Natural Influence
 
 The proportionate natural influence (PNI) is widely used to evaluate integrated hatchery programs because it provides a simple index of the relative influence of natural and hatchery selection on a population. Operationally, PNI combines the proportion of natural-origin broodstock (pNOB) with the proportion of hatchery-origin fish spawning naturally (pHOS) to approximate the balance between natural and hatchery influence. Although PNI has become an important management metric for evaluating hatchery programs, it was intended as a practical surrogate for the relative strength of selection rather than a direct measure of realized genetic or demographic effects.
 
@@ -1303,8 +1415,14 @@ This formulation implicitly assumes that all hatchery-origin fish contribute equ
 
 
 ```{r plot-pni-surface, eval = TRUE, fig.cap = 'Proportion of natural influence (PNI) response to possible values of proportion of natural-origin brood (pNOB) and proportion of hatchery-origin spawners.'}
-calc_pni <- function(pnob, phos){
-  pni = pnob/(pnob + phos)
+calc_pni <- function(pnob, phos) {
+  denominator <- pnob + phos
+
+  if_else(
+    denominator > 0,
+    pnob / denominator,
+    NA_real_
+  )
 }
 
 pnob <- seq(0.0, 1, .01)
@@ -1394,7 +1512,144 @@ Unlike the traditional PNI, the adjusted formulation acknowledges that hatchery-
 
 The weighting function presented here is intended to illustrate the conceptual framework rather than prescribe a single implementation. Numerous formulations are possible and should be evaluated using long-term parentage, pedigree, relative reproductive success, productivity, and demographic data. As integrated supplementation programs continue to mature and multigenerational datasets become available, these data provide an opportunity to refine the estimation of hatchery influence beyond the assumptions inherent in the current PNI formulation. Consequently, the proposed framework should be viewed as a starting point for future development rather than a replacement for the current PNI metric.
 
+## PNI Calculation Comparison
 
+```{r compare-pni, fig.cap = "Estimated PNI values using the current calculation method and a weighted method using parental pNOB as the weight."}
+calc_weighted_pni <- function(pnob, phos, parent_pnob) {
+  weighted_phos <- phos * (1 - parent_pnob)
+  denominator <- pnob + weighted_phos
+
+  if_else(
+    denominator > 0,
+    pnob / denominator,
+    NA_real_
+  )
+}
+
+df <- tidyr::expand_grid(
+  pnob = seq(0, 1, by = 0.05),
+  phos = seq(0, 1, by = 0.05),
+  parent_pnob = seq(0, 1, by = 0.20)
+) %>%
+  mutate(
+    standard_pni = calc_pni(
+      pnob = pnob,
+      phos = phos
+    ),
+    weighted_pni = calc_weighted_pni(
+      pnob = pnob,
+      phos = phos,
+      parent_pnob = parent_pnob
+    ),
+    pni_difference = weighted_pni - standard_pni,
+    parent_pnob_label = factor(
+      parent_pnob,
+      levels = seq(0, 1, by = 0.20),
+      labels = paste0(
+        "Parental pNOB = ",
+        scales::percent(seq(0, 1, by = 0.20))
+      )
+    )
+  )
+
+
+df_long <- df %>%
+  select(
+    pnob,
+    phos,
+    parent_pnob_label,
+    `Conventional PNI` = standard_pni,
+    `Weighted PNI` = weighted_pni
+  ) %>%
+  pivot_longer(
+    cols = c(`Conventional PNI`, `Weighted PNI`),
+    names_to = "Approach",
+    values_to = "pni"
+  )
+
+ggplot(
+  df_long,
+  aes(
+    x = pnob,
+    y = phos,
+    fill = pni
+  )
+) +
+  geom_tile() +
+  facet_grid(
+    rows = vars(parent_pnob_label),
+    cols = vars(Approach)
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    labels = scales::label_percent()
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    labels = scales::label_percent()
+  ) +
+  scale_fill_viridis_c(
+    limits = c(0, 1),
+    labels = scales::label_percent(),
+    na.value = "white"
+  ) +
+  labs(
+    x = "Current-generation pNOB",
+    y = "Current-generation pHOS",
+    fill = "PNI"
+  ) +
+  coord_equal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold")
+  )
+
+```
+
+```{r pni-diff, fig.cap = "Difference in PNI values using the current calculation method and a weighted method using parental pNOB as the weight."}
+ggplot(
+  df,
+  aes(
+    x = pnob,
+    y = phos,
+    fill = pni_difference
+  )
+) +
+  geom_tile() +
+  facet_wrap(
+    vars(parent_pnob_label),
+    ncol = 3
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    labels = scales::label_percent()
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    labels = scales::label_percent()
+  ) +
+  scale_fill_viridis_c(
+    option = "C",
+    limits = c(0, 1),
+    labels = scales::label_number(accuracy = 0.01),
+    na.value = "white"
+  ) +
+  labs(
+    x = "Current-generation pNOB",
+    y = "Current-generation pHOS",
+    fill = "Increase in PNI",
+    title = "Effect of Weighting pHOS by Parental pNOB",
+    subtitle = "Difference equals weighted PNI minus conventional PNI"
+  ) +
+  coord_equal() +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold"),
+    plot.title = element_text(face = "bold")
+  )
+```
 
 
 ```{r 3d-surface, eval = FALSE}

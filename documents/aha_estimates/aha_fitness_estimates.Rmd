@@ -1,0 +1,1198 @@
+---
+title: "AHA and Ford"
+output: html_document
+date: "2026-09-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-pkgs}
+library(tidyverse)
+
+# SOURCE FUNCTIONS -------------------------------------------------------------
+
+source("../../R/ford_model_funs.R")
+source("../../R/aha_model_funs.R")
+```
+
+```{r naselle-test}
+# MODEL PARAMETERS -------------------------------------------------------------
+# ==============================================================================
+# VALIDATION: AHA NASELLE CHINOOK - SCENARIO 1
+# ==============================================================================
+
+
+# NASELLE SCENARIO 1 PARAMETERS ------------------------------------------------
+
+naselle_pars <- list(
+
+  # ============================================================================
+  # FORD / AHA GENETIC PARAMETERS
+  # ============================================================================
+
+  theta_nat = 100,
+  theta_hat = 80,
+
+  sigma2 = 10,
+  selection_sd = 3,
+  h2 = 0.50,
+
+  # AHA Scenario 1 starting trait values
+  P_nat_0 = 93,
+  P_hat_0 = 92,
+
+  fitness_floor = 0.50,
+
+  # ============================================================================
+  # AHA NATURAL POPULATION PARAMETERS
+  # ============================================================================
+
+  prod_adult = 4.00,
+  cap_adult = 6150,
+
+  fecundity_nor = 4200,
+  prop_female_nor = 0.50,
+
+  sar_nor = 0.01,
+
+  cap_unlimited = 1e12,
+
+  # ============================================================================
+  # AHA FITNESS ALLOCATION
+  # ============================================================================
+
+  rel_loss_sp_em = 0.50,
+  rel_loss_em_sm = 0.40,
+  rel_loss_sm_ad = 0.10,
+
+  # ============================================================================
+  # HATCHERY-ORIGIN SPAWNER EFFECT
+  # ============================================================================
+
+  rrs_hos = 0.80,
+
+  # ============================================================================
+  # HATCHERY PARAMETERS
+  # ============================================================================
+
+  prespawn_survival = 0.95,
+
+  fecundity_hor = 4200,
+  prop_female_hor = 0.50,
+
+  surv_egg_yearling = 0.85,
+  surv_egg_subyearling = 0.80,
+
+  prop_yearling = 1,
+  prop_subyearling = 0,
+
+  # ============================================================================
+  # SIMULATION
+  #
+  # Use 100 here for now so we can inspect the complete Ford trajectory.
+  # ============================================================================
+
+  generations = 100
+)
+
+
+# ==============================================================================
+# TEST 1: OMEGA
+# ==============================================================================
+
+naselle_omega2 <- calc_omega2(
+  selection_sd = naselle_pars$selection_sd,
+  sigma2 = naselle_pars$sigma2
+)
+
+naselle_omega2
+
+# Expected:
+# omega^2 = 90
+#
+# Therefore:
+# omega = sqrt(90) = 9.487
+
+sqrt(naselle_omega2)
+
+
+# ==============================================================================
+# TEST 2: INITIAL FITNESS
+# ==============================================================================
+
+naselle_initial_fitness <- aha_fitness(
+  P_nat = naselle_pars$P_nat_0,
+  pars = naselle_pars
+)
+
+naselle_initial_fitness
+
+# AHA expected:
+# Initial fitness = 0.79
+
+
+# ==============================================================================
+# TEST 3: DERIVED LIFE-STAGE PARAMETERS
+# ==============================================================================
+
+naselle_life_pars <- derive_aha_lifestages(
+  prod_adult = naselle_pars$prod_adult,
+  cap_adult = naselle_pars$cap_adult,
+  fecundity = naselle_pars$fecundity_nor,
+  prop_female = naselle_pars$prop_female_nor,
+  sar = naselle_pars$sar_nor,
+  cap_unlimited = naselle_pars$cap_unlimited
+)
+
+naselle_life_pars
+
+
+# AHA expected values:
+#
+# stage                 productivity     capacity
+# ---------------------------------------------------
+# spawner_emergence       2100           1.0e12
+# emergence_smolt            0.190        615000
+# smolt_adult                0.010        1.0e12
+
+
+# ==============================================================================
+# CREATE VALIDATION TABLE
+# ==============================================================================
+
+naselle_expected <- tibble(
+  stage = c(
+    "spawner_emergence",
+    "emergence_smolt",
+    "smolt_adult"
+  ),
+
+  expected_productivity = c(
+    2100,
+    0.190,
+    0.010
+  ),
+
+  expected_capacity = c(
+    1e12,
+    615000,
+    1e12
+  )
+)
+
+
+naselle_validation <- naselle_life_pars %>%
+
+  left_join(
+    naselle_expected,
+    by = "stage"
+  ) %>%
+
+  mutate(
+    productivity_difference =
+      productivity - expected_productivity,
+
+    capacity_difference =
+      capacity - expected_capacity
+  )
+
+
+naselle_validation
+
+
+# ==============================================================================
+# TEST 4: FITNESS ALLOCATION
+# ==============================================================================
+
+naselle_initial_fitness_allocation <- allocate_fitness(
+  fitness = naselle_initial_fitness,
+  pars = naselle_pars
+)
+
+naselle_initial_fitness_allocation
+
+
+naselle_initial_life_pars <- apply_fitness_to_lifestages(
+  life_pars = naselle_life_pars,
+  fitness = naselle_initial_fitness,
+  pars = naselle_pars
+)
+
+naselle_initial_life_pars
+
+
+# ==============================================================================
+# TEST 5: FORD MODEL
+#
+# Scenario 1 reports pHOS goal = 0.30 and pNOB goal = 0.30.
+#
+# IMPORTANT:
+# These are GOALS, not necessarily the realized pHOS and pNOB used in the
+# equilibrium population calculation. This test therefore evaluates the
+# genetic model under constant pHOS = 0.30 and pNOB = 0.30. It should not yet
+# be interpreted as a complete reproduction of Scenario 1.
+# ==============================================================================
+
+naselle_ford_goal <- ford_model(
+  pHOS = 0.30,
+  pNOB = 0.30,
+  pars = naselle_pars
+) %>%
+
+  mutate(
+    fitness = aha_fitness(
+      P_nat = P_nat,
+      pars = naselle_pars
+    )
+  )
+
+
+naselle_ford_goal
+
+
+# Equilibrium / final generation
+
+naselle_ford_goal %>%
+  slice_tail(
+    n = 1
+  )
+
+
+# ==============================================================================
+# PLOT FORD TRAIT VALUES
+# ==============================================================================
+
+naselle_ford_goal %>%
+
+  select(
+    generation,
+    Natural = P_nat,
+    Hatchery = P_hat
+  ) %>%
+
+  pivot_longer(
+    cols = c(
+      Natural,
+      Hatchery
+    ),
+    names_to = "population",
+    values_to = "trait"
+  ) %>%
+
+  ggplot(
+    aes(
+      x = generation,
+      y = trait,
+      color = population
+    )
+  ) +
+
+  geom_line(
+    linewidth = 1
+  ) +
+
+  geom_hline(
+    yintercept = naselle_pars$theta_nat,
+    linetype = "dashed"
+  ) +
+
+  geom_hline(
+    yintercept = naselle_pars$theta_hat,
+    linetype = "dashed"
+  ) +
+
+  labs(
+    x = "Generation",
+    y = "Mean Trait Value",
+    color = "Population"
+  ) +
+
+  theme_bw()
+
+
+# ==============================================================================
+# PLOT FITNESS
+# ==============================================================================
+
+ggplot(
+  naselle_ford_goal,
+  aes(
+    x = generation,
+    y = fitness
+  )
+) +
+
+  geom_line(
+    linewidth = 1
+  ) +
+
+  geom_hline(
+    yintercept = 1,
+    linetype = "dashed"
+  ) +
+
+  scale_y_continuous(
+    limits = c(
+      0.5,
+      1
+    )
+  ) +
+
+  labs(
+    x = "Generation",
+    y = "Natural Relative Fitness"
+  ) +
+
+  theme_bw()
+
+```
+
+
+```{r test-metrics}
+naselle_omega2
+naselle_initial_fitness
+naselle_validation
+naselle_ford_goal %>% slice_tail(n = 1)
+```
+
+
+```{r next-test}
+naselle_no_hatchery <- ford_model(
+  pHOS = 0,
+  pNOB = 0,
+  pars = naselle_pars
+) %>%
+  mutate(
+    fitness = aha_fitness(
+      P_nat = P_nat,
+      pars = naselle_pars
+    )
+  )
+
+naselle_no_hatchery %>%
+  select(
+    generation,
+    P_nat,
+    P_hat,
+    fitness
+  ) %>%
+  slice(
+    1:10,
+    20,
+    29,
+    30,
+    50,
+    101
+  )
+```
+
+
+```{r more-tests}
+# ==============================================================================
+# VALIDATION: NASELLE SCENARIO 1 DEMOGRAPHIC MODEL
+# ==============================================================================
+
+
+# ==============================================================================
+# TEST 6: ADULT-SCALE BEVERTON-HOLT
+#
+# First test the adult-scale BH relationship directly.
+#
+# AHA Scenario 1:
+#   Adult productivity = 4.0
+#   Adult capacity     = 6,150
+#
+# Expected equilibrium abundance:
+#   Neq = 4,612
+# ==============================================================================
+
+
+naselle_adult_bh <- tibble(
+  spawners = seq(
+    0,
+    8000,
+    by = 1
+  )
+) %>%
+
+  mutate(
+    recruits = aha_bh(
+      N = spawners,
+      productivity = naselle_pars$prod_adult,
+      capacity = naselle_pars$cap_adult
+    ),
+
+    replacement = recruits - spawners
+  )
+
+
+# Find equilibrium abundance ---------------------------------------------------
+
+naselle_adult_bh %>%
+  filter(spawners > 0) %>%
+  slice_min(
+    abs(replacement),
+    n = 1
+  )
+
+
+# Expected:
+# Neq approximately 4,612
+
+
+# Plot adult-scale stock-recruit curve -----------------------------------------
+
+ggplot(
+  naselle_adult_bh,
+  aes(
+    x = spawners,
+    y = recruits
+  )
+) +
+
+  geom_line(
+    linewidth = 1
+  ) +
+
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dashed"
+  ) +
+
+  labs(
+    x = "Natural Spawners",
+    y = "Adult Recruits"
+  ) +
+
+  theme_bw()
+
+
+# ==============================================================================
+# TEST 7: ANALYTICAL EQUILIBRIUM
+#
+# For:
+#
+#        P * N
+# R = -----------
+#       1 + P*N/K
+#
+# equilibrium occurs where R = N.
+#
+# Solving gives:
+#
+# Neq = K * (P - 1) / P
+# ==============================================================================
+
+
+naselle_neq <- with(
+  naselle_pars,
+
+  cap_adult *
+    (prod_adult - 1) /
+    prod_adult
+)
+
+naselle_neq
+
+
+# Expected:
+# 4612.5
+#
+# AHA displayed value:
+# 4,612
+
+
+# ==============================================================================
+# TEST 8: MSY
+#
+# For this parameterization of Beverton-Holt:
+#
+# SMSY = K * (sqrt(P) - 1) / P
+#
+# and:
+#
+# MSY = R(SMSY) - SMSY
+# ==============================================================================
+
+
+naselle_smsy <- with(
+  naselle_pars,
+
+  cap_adult *
+    (sqrt(prod_adult) - 1) /
+    prod_adult
+)
+
+
+naselle_msy_recruits <- aha_bh(
+  N = naselle_smsy,
+  productivity = naselle_pars$prod_adult,
+  capacity = naselle_pars$cap_adult
+)
+
+
+naselle_msy <- 
+  naselle_msy_recruits -
+  naselle_smsy
+
+
+naselle_expl_msy <-
+  naselle_msy /
+  naselle_msy_recruits
+
+
+tibble(
+  metric = c(
+    "Neq",
+    "SMSY",
+    "MSY",
+    "MSY exploitation rate"
+  ),
+
+  calculated = c(
+    naselle_neq,
+    naselle_smsy,
+    naselle_msy,
+    naselle_expl_msy
+  ),
+
+  AHA_expected = c(
+    4612,
+    1537,
+    1537,
+    0.500
+  )
+)
+
+
+# ==============================================================================
+# TEST 9: THREE-STAGE MODEL VS ADULT-SCALE BEVERTON-HOLT
+#
+# This is an important test.
+#
+# The life-stage parameters were derived from the adult-scale parameters.
+# Therefore the three-stage AHA model at fitness = 1 should reproduce the
+# adult-scale stock-recruit relationship.
+# ==============================================================================
+
+
+naselle_stage_test <- tibble(
+  spawners = seq(
+    1,
+    8000,
+    by = 10
+  )
+) %>%
+
+  mutate(
+
+    # Direct adult-scale BH
+    adults_bh = aha_bh(
+      N = spawners,
+      productivity = naselle_pars$prod_adult,
+      capacity = naselle_pars$cap_adult
+    ),
+
+
+    # Three-stage AHA
+    adults_stages = map_dbl(
+      spawners,
+
+      ~ aha_natural_production(
+        NOS = .x,
+        HOS = 0,
+        fitness = 1,
+        pars = naselle_pars
+      )$adults["NOS"]
+    ),
+
+
+    difference =
+      adults_stages -
+      adults_bh
+  )
+
+
+# Examine differences ----------------------------------------------------------
+
+naselle_stage_test %>%
+  summarise(
+    max_abs_difference =
+      max(abs(difference)),
+
+    mean_abs_difference =
+      mean(abs(difference))
+  )
+
+
+# Plot direct BH vs three-stage AHA --------------------------------------------
+
+naselle_stage_test %>%
+
+  select(
+    spawners,
+    `Adult BH` = adults_bh,
+    `Three-stage AHA` = adults_stages
+  ) %>%
+
+  pivot_longer(
+    cols = -spawners,
+    names_to = "model",
+    values_to = "adults"
+  ) %>%
+
+  ggplot(
+    aes(
+      x = spawners,
+      y = adults,
+      color = model
+    )
+  ) +
+
+  geom_line(
+    linewidth = 1
+  ) +
+
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dashed"
+  ) +
+
+  labs(
+    x = "Natural Spawners",
+    y = "Adult Recruits",
+    color = NULL
+  ) +
+
+  theme_bw()
+
+
+# ==============================================================================
+# TEST 10: THREE-STAGE EQUILIBRIUM
+#
+# Find the equilibrium abundance generated by the three-stage implementation.
+# ==============================================================================
+
+
+naselle_stage_equilibrium <- naselle_stage_test %>%
+
+  mutate(
+    replacement =
+      adults_stages -
+      spawners
+  ) %>%
+
+  slice_min(
+    abs(replacement),
+    n = 1
+  )
+
+
+naselle_stage_equilibrium
+
+
+# Expected equilibrium:
+# approximately 4,612
+
+
+# ==============================================================================
+# TEST 11: SEQUENTIAL HARVEST
+#
+# Naselle Scenario 1 NOR harvest rates:
+#
+# Fishery 1 = 0.35
+# Fishery 2 = 0.27
+# Fishery 3 = 0.15
+# Fishery 4 = 0.12
+#
+# AHA reports total exploitation = 0.65.
+# ==============================================================================
+
+
+naselle_harvest <- aha_harvest(
+  adults = 10000,
+
+  harvest_rates = c(
+    0.35,
+    0.27,
+    0.15,
+    0.12
+  ),
+
+  adult_passage_survival = 1
+)
+
+
+naselle_harvest
+
+
+# Calculate exploitation rate --------------------------------------------------
+
+naselle_harvest %>%
+
+  mutate(
+    exploitation_rate =
+      total_harvest / 10000
+  )
+
+
+# Expected:
+# total exploitation approximately 0.65
+
+
+# ==============================================================================
+# TEST 12: MANUAL HARVEST CHECK
+# ==============================================================================
+
+
+naselle_harvest_manual <- tibble(
+
+  stage = c(
+    "Start",
+    "Fishery 1",
+    "Fishery 2",
+    "Fishery 3",
+    "Fishery 4"
+  ),
+
+  abundance = c(
+    10000,
+
+    10000 *
+      (1 - 0.35),
+
+    10000 *
+      (1 - 0.35) *
+      (1 - 0.27),
+
+    10000 *
+      (1 - 0.35) *
+      (1 - 0.27) *
+      (1 - 0.15),
+
+    10000 *
+      (1 - 0.35) *
+      (1 - 0.27) *
+      (1 - 0.15) *
+      (1 - 0.12)
+  )
+)
+
+
+naselle_harvest_manual
+
+
+# Total exploitation -----------------------------------------------------------
+
+1 -
+  prod(
+    1 - c(
+      0.35,
+      0.27,
+      0.15,
+      0.12
+    )
+  )
+```
+
+
+```{r test-naselle2}
+# ==============================================================================
+# VALIDATION: AHA NASELLE CHINOOK - SCENARIO 2
+# ==============================================================================
+
+
+# SCENARIO 2 PARAMETERS ---------------------------------------------------------
+
+naselle2_pars <- naselle_pars
+
+
+# Hatchery production
+
+naselle2_pars$prespawn_survival <- 0.95
+
+naselle2_pars$fecundity_hor <- 4200
+naselle2_pars$prop_female_hor <- 0.50
+
+naselle2_pars$surv_egg_yearling <- 0.85
+naselle2_pars$surv_egg_subyearling <- 0.80
+
+naselle2_pars$prop_yearling <- 0
+naselle2_pars$prop_subyearling <- 1
+
+
+# Hatchery-origin fish
+
+naselle2_pars$rrs_hos <- 0.80
+
+naselle2_pars$sar_hor_yearling <- 0
+naselle2_pars$sar_hor_subyearling <- 0.003
+
+naselle2_pars$sar_rel <- 0.30
+
+
+# Hatchery management
+
+naselle2_pars$weir_efficiency <- 0
+
+naselle2_pars$prop_hatchery <- 0.90
+naselle2_pars$prop_natural_spawn <- 0.10
+
+naselle2_pars$yearling_releases <- 0
+naselle2_pars$subyearling_releases <- 1000000
+
+naselle2_pars$imported_brood <- 0
+naselle2_pars$local_brood <- 627
+naselle2_pars$export_brood_goal <- 313
+
+naselle2_pars$max_prop_nor_brood <- 0.30
+
+
+# Strays
+
+naselle2_pars$total_strays <- 56
+naselle2_pars$effective_strays <- 45
+
+
+# Management targets
+
+naselle2_pars$pHOS_goal <- 0.30
+naselle2_pars$pNOB_goal <- 0.30
+
+
+# Harvest
+
+naselle2_pars$harvest_nor <- c(
+  0.35,
+  0.27,
+  0.15,
+  0.12
+)
+
+naselle2_pars$harvest_hor <- c(
+  0.35,
+  0.27,
+  0.15,
+  0.12
+)
+
+
+# ==============================================================================
+# TEST 13: SUBYEARLING HATCHERY RETURNS
+#
+# Scenario 2 releases:
+#
+#   1,000,000 subyearlings
+#
+# Applied subyearling SAR:
+#
+#   0.30%
+#
+# Therefore, before harvest:
+#
+#   1,000,000 * 0.003 = 3,000 adults
+# ==============================================================================
+
+
+naselle2_hor_adults <- 
+  naselle2_pars$subyearling_releases *
+  naselle2_pars$sar_hor_subyearling
+
+naselle2_hor_adults
+
+
+# Expected:
+# 3000
+
+
+# ==============================================================================
+# TEST 14: HARVEST OF HATCHERY RETURNS
+# ==============================================================================
+
+
+naselle2_hor_harvest <- aha_harvest(
+  adults = naselle2_hor_adults,
+  harvest_rates = naselle2_pars$harvest_hor,
+  adult_passage_survival = 1
+)
+
+naselle2_hor_harvest
+
+
+naselle2_hor_harvest %>%
+  mutate(
+    exploitation_rate =
+      total_harvest / naselle2_hor_adults
+  )
+
+
+# Expected total exploitation:
+# approximately 0.65
+#
+# Therefore escapement should be approximately:
+#
+# 3000 * (1 - 0.65)
+#
+# or roughly 1,050 adults.
+
+
+# ==============================================================================
+# TEST 15: NOR HARVEST
+#
+# Use Scenario 1 natural equilibrium abundance as a simple reference case.
+#
+# This is NOT yet the Scenario 2 equilibrium calculation.
+# ==============================================================================
+
+
+naselle2_nor_harvest <- aha_harvest(
+  adults = naselle_neq,
+  harvest_rates = naselle2_pars$harvest_nor,
+  adult_passage_survival = 1
+)
+
+naselle2_nor_harvest
+
+
+# ==============================================================================
+# TEST 16: EFFECTIVE STRAYS
+#
+# Scenario 2 gives:
+#
+# Total strays     = 56
+# Effective strays = 45
+#
+# The ratio should correspond closely to RRS = 0.80.
+# ==============================================================================
+
+
+naselle2_stray_effectiveness <-
+  naselle2_pars$effective_strays /
+  naselle2_pars$total_strays
+
+naselle2_stray_effectiveness
+
+
+# Compare with RRS
+
+naselle2_pars$rrs_hos
+
+
+# Expected:
+#
+# 45 / 56 = 0.8036
+#
+# which is essentially the 0.80 RRS assumption after rounding.
+
+
+# ==============================================================================
+# TEST 17: pHOS ACCOUNTING
+#
+# Demonstrate the distinction between census and effective pHOS.
+#
+# Here we use an arbitrary 1000 NOS simply to verify the calculation.
+# We are NOT claiming this is Scenario 2 equilibrium NOS.
+# ==============================================================================
+
+
+naselle2_phos_test <- aha_calc_phos(
+  NOS = 1000,
+  HOS = naselle2_pars$total_strays,
+  rrs_hos = naselle2_pars$rrs_hos
+)
+
+naselle2_phos_test
+
+
+# Manually verify effective HOS
+
+naselle2_pars$total_strays *
+  naselle2_pars$rrs_hos
+
+
+# Expected:
+# 44.8, displayed by AHA as approximately 45 effective strays.
+
+
+# ==============================================================================
+# TEST 18: HATCHERY PRODUCTION FROM LOCAL BROOD
+#
+# This tests our hatchery-production FUNCTION.
+#
+# IMPORTANT:
+# We are not yet assuming that this is how AHA derives the Scenario 2
+# 1,000,000 subyearling release input.
+# ==============================================================================
+
+
+naselle2_brood_production <- aha_hatchery_releases(
+  NOB = 0,
+  HOB = naselle2_pars$local_brood,
+  imported = naselle2_pars$imported_brood,
+  pars = naselle2_pars
+)
+
+naselle2_brood_production
+
+
+# ==============================================================================
+# TEST 19: REQUIRED BROOD FOR 1,000,000 SUBYEARLING RELEASES
+#
+# Reverse the production calculation.
+# ==============================================================================
+
+
+naselle2_eggs_per_brood <- 
+  naselle2_pars$prespawn_survival *
+  naselle2_pars$fecundity_hor *
+  naselle2_pars$prop_female_hor
+
+
+naselle2_release_survival <-
+  naselle2_pars$surv_egg_subyearling
+
+
+naselle2_required_brood <-
+  naselle2_pars$subyearling_releases /
+  (
+    naselle2_eggs_per_brood *
+    naselle2_release_survival
+  )
+
+
+tibble(
+  eggs_per_brood = naselle2_eggs_per_brood,
+  release_survival = naselle2_release_survival,
+  calculated_brood_required = naselle2_required_brood,
+  AHA_local_brood = naselle2_pars$local_brood
+)
+
+
+# ==============================================================================
+# TEST 20: FORD MODEL USING pHOS/pNOB GOALS
+#
+# Again, these are management goals rather than necessarily realized values.
+# This test is useful because Scenario 2 has an AHA equilibrium fitness
+# target of 0.50.
+# ==============================================================================
+
+
+naselle2_ford_goal <- ford_model(
+  pHOS = naselle2_pars$pHOS_goal,
+  pNOB = naselle2_pars$pNOB_goal,
+  pars = naselle2_pars
+) %>%
+
+  mutate(
+    fitness = aha_fitness(
+      P_nat = P_nat,
+      pars = naselle2_pars
+    )
+  )
+
+
+naselle2_ford_goal %>%
+  slice_tail(
+    n = 1
+  )
+
+
+# AHA Scenario 2 reports:
+#
+# equilibrium fitness = 0.50
+#
+# However, remember that AHA imposes a fitness floor of 0.50.
+
+
+# ==============================================================================
+# TEST 21: FITNESS FLOOR
+# ==============================================================================
+
+
+naselle2_ford_goal %>%
+
+  summarise(
+    minimum_fitness =
+      min(fitness),
+
+    equilibrium_fitness =
+      last(fitness)
+  )
+
+
+# ==============================================================================
+# PLOT SCENARIO 2 FITNESS TRAJECTORY
+# ==============================================================================
+
+
+ggplot(
+  naselle2_ford_goal,
+  aes(
+    x = generation,
+    y = fitness
+  )
+) +
+
+  geom_line(
+    linewidth = 1
+  ) +
+
+  geom_hline(
+    yintercept = naselle2_pars$fitness_floor,
+    linetype = "dashed"
+  ) +
+
+  scale_y_continuous(
+    limits = c(
+      0.45,
+      1
+    )
+  ) +
+
+  labs(
+    x = "Generation",
+    y = "Natural Relative Fitness"
+  ) +
+
+  theme_bw()
+```
+
+```{r workflow}
+# run_aha_model.R
+# │
+# ├── defines all parameters
+# │
+# ├── R/ford_model.R
+# │      │
+# │      ├── selection_response()
+# │      ├── ford_generation()
+# │      └── ford_model()
+# │                │
+# │                ▼
+# │          P_nat and P_hat
+# │                │
+# │
+# └── R/aha_model.R
+#        │
+#        ├── aha_fitness(P_nat)
+#        │          │
+#        │          ▼
+#        │       fitness
+#        │          │
+#        ├── allocate_fitness()
+#        │          │
+#        ├── derive_aha_lifestages()
+#        │          │
+#        └── aha_natural_production()
+#                   │
+#                   ▼
+#           emergents → smolts → adults
+```
+
+
+

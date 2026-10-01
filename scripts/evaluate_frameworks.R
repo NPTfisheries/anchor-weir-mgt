@@ -68,112 +68,10 @@ accounting_params <- list(
   source_blw          = paste0("Median years: ", median_params$years_blw)
 )
 
-# run scenarios----
 
-# scenario_inputs <- create_scenario_inputs(
-#   no_manarea_est = 382,  # current/scenario natural-origin abundance estimate
-#   ho_manarea_est = 536,   # current/scenario hatchery-origin abundance estimate
-#   brood_need     = 160,   # broodstock need
-#   spawner_goal   = 800,   # adult spawner goal
-#   wl_scaling     = 1.4,    # Wild-Lostine scaling factor
-#   utilization_no  = 1.0,   # proportion of allowed NO impacts actually taken (1.0 = full utilization)
-#   utilization_ho  = 1.0    # proportion of allowed HO harvest actually taken (1.0 = full utilization)
-# )
+# validate management frameworks at varying abundance levels
 
-scenario_inputs <- create_scenario_inputs(
-  no_manarea_est = 200,  # current/scenario natural-origin abundance estimate
-  ho_manarea_est = 200,   # current/scenario hatchery-origin abundance estimate
-  brood_need     = 160,   # broodstock need
-  spawner_goal   = 800,   # adult spawner goal
-  wl_scaling     = 1.4,    # Wild-Lostine scaling factor
-  utilization_no  = 1.0,   # proportion of allowed NO impacts actually taken (1.0 = full utilization)
-  utilization_ho  = 1.0    # proportion of allowed HO harvest actually taken (1.0 = full utilization)
-)
-
-# historical Sliding Scale framework
-
-sliding_result <- run_sliding_scale_scenario(
-  scenario_inputs = scenario_inputs,
-  accounting_params = accounting_params
-)
-
-sliding_output <- tidy_sliding_scale_result(sliding_result)
-
-# anchor method framework - prioritizes total spawner goal over pHOS
-
-anchor_inputs <- list(
-  brood_need   = scenario_inputs$brood_need,
-  spawner_goal = scenario_inputs$spawner_goal,
-  wl_scaling   = scenario_inputs$wl_scaling
-)
-
-anchor_result <- run_accounting_scenario(
-  scenario_inputs = scenario_inputs,
-  accounting_params = accounting_params,
-  anchor_inputs = anchor_inputs
-)
-
-anchor_output <- tidy_accounting_result(anchor_result)
-
-# HSRG recovery phase framework - prioritizes pHOS over total spawners
-
-recovery_targets <- list(
-  Preservation = list(
-    pNOB = 1.00,
-    pHOS = 1.00,
-    PNI  = NA_real_
-  ),
-  Recolonization = list(
-    pNOB = 1.00,
-    pHOS = 1.00,
-    PNI  = NA_real_
-  ),
-  `Local Adaptation` = list(
-    pNOB = 1.00,
-    pHOS = 0.50,
-    PNI  = 0.67
-  ),
-  `Full Restoration` = list(
-    pNOB = 1.00,
-    pHOS = 0.30,
-    PNI  = 0.77
-  )
-)
-
-recovery_result <- run_recovery_scenario(
-  scenario_inputs = scenario_inputs,
-  accounting_params = accounting_params,
-  recovery_abundance = scenario_inputs$no_manarea_est,
-  cbp_low = 1000,
-  cbp_medium = 2500,
-  cbp_high = 4000,
-  recovery_targets = recovery_targets
-)
-
-recovery_output <- tidy_recovery_result(recovery_result)
-
-management_comparison <- bind_rows(
-  Anchor = anchor_output,
-  Recovery = recovery_output,
-  Sliding_Scale = sliding_output,
-  .id = "method"
-)
-
-t(management_comparison)
-
-
-# ============================================================
-# Validate management frameworks at varying abundance levels
-#
-# 1. NOR abundance varies 0-2000; HOR held at 200
-# 2. HOR abundance varies 0-2000; NOR held at 200
-# ============================================================
-
-abundance_test <- seq(0, 2000, by = 10)
-
-# ------------------------------------------------------------
-# Function to evaluate all three management methods
-# ------------------------------------------------------------
+# function to run one return year abundance
 
 run_management_test <- function(
     no_abundance,
@@ -182,15 +80,24 @@ run_management_test <- function(
 ) {
   
   # Update adult abundance.
-  test_inputs <- scenario_inputs
   
-  test_inputs$no_manarea_est <- no_abundance
-  test_inputs$ho_manarea_est <- ho_abundance
+  test_inputs <- create_scenario_inputs(
+    no_manarea_est = no_abundance,  # current/scenario natural-origin abundance estimate
+    ho_manarea_est = ho_abundance,   # current/scenario hatchery-origin abundance estimate
+    brood_need     = 160,   # broodstock need
+    spawner_goal   = 800,   # adult spawner goal
+    wl_scaling     = 1.4,    # Wild-Lostine scaling factor
+    utilization_no  = 1.0,   # proportion of allowed NO impacts actually taken (1.0 = full utilization)
+    utilization_ho  = 1.0    # proportion of allowed HO harvest actually taken (1.0 = full utilization)
+  )
   
+# anchor method
   
-  # ----------------------------------------------------------
-  # Anchor
-  # ----------------------------------------------------------
+  anchor_inputs <- list(
+    brood_need   = test_inputs$brood_need,
+    spawner_goal = test_inputs$spawner_goal,
+    wl_scaling   = test_inputs$wl_scaling
+  )
   
   anchor_test <- run_accounting_scenario(
     scenario_inputs = test_inputs,
@@ -205,12 +112,31 @@ run_management_test <- function(
       method = "Anchor"
     )
   
+ # recovery framework
   
-  # ----------------------------------------------------------
-  # Recovery
-  # ----------------------------------------------------------
+  recovery_targets <- list(
+    Preservation = list(
+      pNOB = 1.00,
+      pHOS = 1.00,
+      PNI  = NA_real_
+    ),
+    Recolonization = list(
+      pNOB = 1.00,
+      pHOS = 1.00,
+      PNI  = NA_real_
+    ),
+    `Local Adaptation` = list(
+      pNOB = 1.00,
+      pHOS = 0.50,
+      PNI  = 0.67
+    ),
+    `Full Restoration` = list(
+      pNOB = 1.00,
+      pHOS = 0.30,
+      PNI  = 0.77
+    )
+  )
   
-  # Recovery phase is determined from NOR abundance.
   recovery_test <- run_recovery_scenario(
     scenario_inputs = test_inputs,
     accounting_params = accounting_params,
@@ -229,9 +155,7 @@ run_management_test <- function(
     )
   
   
-  # ----------------------------------------------------------
-  # Sliding Scale
-  # ----------------------------------------------------------
+ # sliding scale
   
   sliding_test <- run_sliding_scale_scenario(
     scenario_inputs = test_inputs,
@@ -246,9 +170,7 @@ run_management_test <- function(
     )
   
   
-  # ----------------------------------------------------------
-  # Combine
-  # ----------------------------------------------------------
+# combine results
   
   bind_rows(
     anchor_out,
@@ -267,13 +189,16 @@ run_management_test <- function(
     )
 }
 
+# validation for each origin
+# 1. NOR abundance varies 0-2000; HOR held at the average return value
+# 2. HOR abundance varies 0-2000; NOR held at the average return value
 
-# ============================================================
+abundance_test <- seq(0, 2000, by = 10)
+
 # NOR validate
 #
 # NOR = 0-2000
-# HOR = 200
-# ============================================================
+# HOR = mean(dat$Post.HO, na.rm = TRUE) # 800
 
 nor_test_results <- purrr::map_dfr(
   abundance_test,
@@ -281,26 +206,23 @@ nor_test_results <- purrr::map_dfr(
     
     run_management_test(
       no_abundance = no_abundance,
-      ho_abundance = 200,
+      ho_abundance = mean(dat$Post.HO, na.rm = TRUE),
       abundance_type = "NOR varies"
     )
   }
 )
 
-
-# ============================================================
 # HOR validation
 #
 # HOR = 0-2000
-# NOR = 200
-# ============================================================
+# NOR = mean(dat$Post.NO, na.rm = TRUE) # 369
 
 hor_test_results <- purrr::map_dfr(
   abundance_test,
   function(ho_abundance) {
     
     run_management_test(
-      no_abundance = 200,
+      no_abundance = mean(dat$Post.NO, na.rm = TRUE),
       ho_abundance = ho_abundance,
       abundance_type = "HOR varies"
     )
@@ -308,9 +230,7 @@ hor_test_results <- purrr::map_dfr(
 )
 
 
-# ============================================================
-# Combined test results
-# ============================================================
+ # combine results across both origins
 
 test_results <- bind_rows(
   nor_test_results,
@@ -327,28 +247,26 @@ test_results <- bind_rows(
   )
 
 
-# create figures
+# figures
 
-# ============================================================
-# Plotting data
-# ============================================================
+# create figures
+fig_path <- './figures/validation/'
 
 plot_results <- test_results %>%
   mutate(
     abundance_type = recode(
       as.character(abundance_type),
-      `NOR varies` = "NOR varies; HOR = 200",
-      `HOR varies` = "HOR varies; NOR = 200"
+      `NOR varies` = "NOR varies; HOR = 800",
+      `HOR varies` = "HOR varies; NOR = 369"
     ),
     abundance_type = factor(
       abundance_type,
       levels = c(
-        "NOR varies; HOR = 200",
-        "HOR varies; NOR = 200"
+        "NOR varies; HOR = 800",
+        "HOR varies; NOR = 369"
       )
     )
   )
-
 
 # total spawners
 
@@ -361,6 +279,7 @@ plot_results %>%
     )
   ) +
   geom_line(linewidth = 1) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_wrap(
     ~abundance_type,
     scales = "free_y"
@@ -371,6 +290,9 @@ plot_results %>%
     color = "Management Method"
   ) +
   theme_bw()
+
+
+ggsave(paste0(fig_path,'val_total_spawners.png'))
 
 
 # origin spawners
@@ -406,6 +328,7 @@ plot_results %>%
     )
   ) +
   geom_line(linewidth = 1) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_grid(
     origin ~ abundance_type,
     scales = "free_y"
@@ -416,6 +339,8 @@ plot_results %>%
     color = "Management Method"
   ) +
   theme_bw()
+
+ggsave(paste0(fig_path,'val_origin_spawners.png'))
 
 # broodstock
 
@@ -450,6 +375,7 @@ plot_results %>%
     )
   ) +
   geom_line(linewidth = 1) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_grid(
     origin ~ abundance_type
   ) +
@@ -459,6 +385,8 @@ plot_results %>%
     color = "Management Method"
   ) +
   theme_bw()
+
+ggsave(paste0(fig_path,'val_broodstock.png'))
 
 # management metrics
 
@@ -498,6 +426,7 @@ plot_results %>%
     )
   ) +
   geom_line(linewidth = 1) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_grid(
     metric ~ abundance_type
   ) +
@@ -510,6 +439,8 @@ plot_results %>%
     color = "Management Method"
   ) +
   theme_bw()
+
+ggsave(paste0(fig_path,'val_management_metrics.png'))
 
 # harvest
 
@@ -552,6 +483,8 @@ plot_results %>%
     y = "Fishery Harvest"
   ) +
   theme_bw()
+
+ggsave(paste0(fig_path,'val_harvest.png'))
 
 # ============================================================
 # Sport versus treaty fishery

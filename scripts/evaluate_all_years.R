@@ -15,8 +15,10 @@ source("./R/sliding_scale_funs.R")
 source("./R/anchor_funs.R")
 source("./R/recovery_funs.R")
 source("./R/ford_model_funs.R")
+source("./R/aha_model_funs.R")
 
 # set parameters to calculate anchor----
+# parameteris follow those produced by Kyle in his original work
 input_file <- "input_chs.csv"
 file_path <- file.path('./data',input_file)
 
@@ -69,34 +71,42 @@ accounting_params <- list(
   source_blw          = paste0("Median years: ", median_params$years_blw)
 )
 
-# run scenarios----
+
+# historical data for comparisons
 
 scenario_dat <- dat %>%
   mutate(nor = ifelse(!is.na(Post.NO), Post.NO, In.NO),
          hor = ifelse(!is.na(Post.HO), Post.HO, In.HO)) %>%
   select(year = Year, nor, hor)
 
-# ============================================================
-# Historical management scenario comparison
-# ============================================================
+# run management frameworks against historical Losine River returns
 
 historical_results <- purrr::pmap_dfr(
   scenario_dat,
   function(year, nor, hor) {
     
-    # --------------------------------------------------------
-    # Create annual scenario inputs
-    # --------------------------------------------------------
+    year_inputs <- create_scenario_inputs(
+      no_manarea_est = nor,  # current/scenario natural-origin abundance estimate
+      ho_manarea_est = hor,   # current/scenario hatchery-origin abundance estimate
+      brood_need     = 160,   # broodstock need
+      spawner_goal   = 800,   # adult spawner goal
+      wl_scaling     = 1.4,    # Wild-Lostine scaling factor
+      utilization_no  = 1.0,   # proportion of allowed NO impacts actually taken (1.0 = full utilization)
+      utilization_ho  = 1.0    # proportion of allowed HO harvest actually taken (1.0 = full utilization)
+    )
     
-    year_inputs <- scenario_inputs
+    # year_inputs <- scenario_inputs
+    # year_inputs$no_manarea_est <- nor
+    # year_inputs$ho_manarea_est <- hor
     
-    year_inputs$no_manarea_est <- nor
-    year_inputs$ho_manarea_est <- hor
+    # anchor method
     
+    anchor_inputs <- list(
+      brood_need   = year_inputs$brood_need,
+      spawner_goal = year_inputs$spawner_goal,
+      wl_scaling   = year_inputs$wl_scaling
+    )
     
-    # --------------------------------------------------------
-    # Anchor
-    # --------------------------------------------------------
     
     anchor_result <- run_accounting_scenario(
       scenario_inputs = year_inputs,
@@ -114,10 +124,30 @@ historical_results <- purrr::pmap_dfr(
         method = "Anchor"
       )
     
+    # recovery method
     
-    # --------------------------------------------------------
-    # Recovery
-    # --------------------------------------------------------
+    recovery_targets <- list(
+      Preservation = list(
+        pNOB = 1.00,
+        pHOS = 1.00,
+        PNI  = NA_real_
+      ),
+      Recolonization = list(
+        pNOB = 1.00,
+        pHOS = 1.00,
+        PNI  = NA_real_
+      ),
+      `Local Adaptation` = list(
+        pNOB = 1.00,
+        pHOS = 0.50,
+        PNI  = 0.67
+      ),
+      `Full Restoration` = list(
+        pNOB = 1.00,
+        pHOS = 0.30,
+        PNI  = 0.77
+      )
+    )
     
     recovery_result <- run_recovery_scenario(
       scenario_inputs = year_inputs,
@@ -139,10 +169,7 @@ historical_results <- purrr::pmap_dfr(
         method = "Recovery"
       )
     
-    
-    # --------------------------------------------------------
-    # Sliding Scale
-    # --------------------------------------------------------
+    # sliding scale
     
     sliding_result <- run_sliding_scale_scenario(
       scenario_inputs = year_inputs,
@@ -159,10 +186,7 @@ historical_results <- purrr::pmap_dfr(
         method = "Sliding Scale"
       )
     
-    
-    # --------------------------------------------------------
-    # Combine annual results
-    # --------------------------------------------------------
+  # combine results
     
     bind_rows(
       anchor_out,
@@ -176,14 +200,111 @@ historical_results <- purrr::pmap_dfr(
     method
   )
 
-# truncate results
+# truncate results to last 20 years
 historical_results_20 <- historical_results %>%
   filter(
     year >= max(year, na.rm = TRUE) - 19
   )
 
-#-------------------------------------------------------
-# create figures - truncate results to last 20 years
+
+# Phenotypic and relative fitness calculations----
+
+# Question to ask - 
+# If the same historical sequence of Lostine NOR and HOR returns had occurred
+# under each management framework, how would the theoretical selection and 
+# relative-fitness trajectories have differed?
+
+# start P_nat and P_hat from a common mean phenotypic value
+# initial conditions P_nat = P_hat
+
+ford_pars <- list(
+  
+  # Initial population mean phenotypes
+  P_nat_0 = 0,
+  P_hat_0 = 0,
+  
+  # Environmental optima
+  theta_nat = 0,
+  theta_hat = 1,
+  
+  # Phenotypic variance
+  sigma2 = 1,
+  
+  # Heritability
+  h2 = 0.5,
+  
+  # Width of stabilizing selection in SD units
+  selection_sd = 1,
+  
+  fitness_floor = 0
+)
+
+# NOTE:
+# The original Fork model looks at generational changes with each time step, 
+# but historical numbers include overlap across multiple generations. As a result
+# We weighted each spawn year phenotypic value by age comp.
+
+ford_historical_age <- historical_results_20 %>%
+  group_split(method) %>%
+  map_dfr(
+    ~run_historical_ford_age(
+      management_dat = .x,
+      pars = ford_pars,
+      age_comp = c(
+        `3` = 0.20,
+        `4` = 0.70,
+        `5` = 0.10
+      )
+    )
+  ) %>%
+  arrange(
+    method,
+    year
+  )
+
+# calculate Ford's relative fitness based on mean phenotypic values and the AHA
+# relative fitness model which introduces a floor (we set floor to 0 so both
+# methods should be equal)
+
+omega2 <- calc_omega2(
+  selection_sd = ford_pars$selection_sd,
+  sigma2 = ford_pars$sigma2
+)
+
+ford_historical_age <- ford_historical_age %>%
+  mutate(
+    
+    # Natural-origin population fitness in natural environment
+    fitness_nat = exp(
+      -0.5 *
+        (P_nat_return - ford_pars$theta_nat)^2 /
+        (omega2 + ford_pars$sigma2)
+    ),
+    
+    # Hatchery-origin population fitness in natural environment
+    fitness_hat = exp(
+      -0.5 *
+        (P_hat_return - ford_pars$theta_nat)^2 /
+        (omega2 + ford_pars$sigma2)
+    ),
+    fitness_return = aha_fitness(
+      P_nat = P_nat_return,
+      pars = ford_pars
+    ),
+    
+    fitness_offspring = aha_fitness(
+      P_nat = P_nat_offspring,
+      pars = ford_pars
+    )
+  )
+
+
+saveRDS(ford_historical_age, file = './data/output/ford_historical_age.rds')
+
+
+# create figures
+fig_path <- './figures/historical_evaluation/'
+
 # true abundance
 historical_results_20 %>%
   select(
@@ -221,7 +342,10 @@ historical_results_20 %>%
     y = "Adult Returns",
     color = "Origin"
   ) +
+  scale_colour_viridis_d(option = "H", begin = .1, end = .9)+
   theme_bw()
+
+ggsave(paste0(fig_path,'historical_abundance.png'))
 
 # natural spawners
 historical_results_20 %>%
@@ -234,6 +358,7 @@ historical_results_20 %>%
   ) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   labs(
     x = "Year",
     y = "Total Natural Spawners",
@@ -241,6 +366,7 @@ historical_results_20 %>%
   ) +
   theme_bw()
 
+ggsave(paste0(fig_path,'total_spawners.png'))
 
 # origin specific spawners
 historical_results_20 %>%
@@ -274,9 +400,10 @@ historical_results_20 %>%
   ) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_wrap(
-    ~origin,
-    scales = "free_y"
+    ~origin#,
+#    scales = "free_y"
   ) +
   labs(
     x = "Year",
@@ -284,6 +411,8 @@ historical_results_20 %>%
     color = "Management Method"
   ) +
   theme_bw()
+
+ggsave(paste0(fig_path,'origin_spawners.png'))
 
 # brood stock
 historical_results_20 %>%
@@ -317,6 +446,7 @@ historical_results_20 %>%
   ) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_wrap(
     ~origin
   ) +
@@ -327,56 +457,7 @@ historical_results_20 %>%
   ) +
   theme_bw()
 
-# management metrics
-historical_results_20 %>%
-  select(
-    year,
-    method,
-    pNOB,
-    pHOS,
-    PNI
-  ) %>%
-  pivot_longer(
-    cols = c(
-      pNOB,
-      pHOS,
-      PNI
-    ),
-    names_to = "metric",
-    values_to = "value"
-  ) %>%
-  mutate(
-    metric = factor(
-      metric,
-      levels = c(
-        "pNOB",
-        "pHOS",
-        "PNI"
-      )
-    )
-  ) %>%
-  ggplot(
-    aes(
-      x = year,
-      y = value,
-      color = method
-    )
-  ) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2) +
-  facet_wrap(
-    ~metric,
-    ncol = 1
-  ) +
-  scale_y_continuous(
-    limits = c(0, 1)
-  ) +
-  labs(
-    x = "Year",
-    y = NULL,
-    color = "Management Method"
-  ) +
-  theme_bw()
+ggsave(paste0(fig_path,'broodstock_take.png'))
 
 # hatchery disposition
 historical_results_20 %>%
@@ -416,6 +497,7 @@ historical_results_20 %>%
   ) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
   facet_wrap(
     ~disposition,
     scales = "free_y"
@@ -427,209 +509,111 @@ historical_results_20 %>%
   ) +
   theme_bw()
 
-# Question to ask!!!
-#If the same historical sequence of Lostine NOR and HOR returns had occurred under each management framework, how would the theoretical selection and relative-fitness trajectories have differed?
+ggsave(paste0(fig_path,'hatchery_disposition.png'))
 
-# start P_nat and P_hat from common initial conditions P_nat = P_hat = Phat
-
-# ============================================================
-# Historical Ford model
-#
-# Uses realized annual pNOB and pHOS from each management
-# framework to update the Ford phenotypic model.
-#
-# NOTE:
-# Each return year is treated as one Ford model step for this
-# initial diagnostic. Model steps should not yet be interpreted
-# as biological generations.
-# ============================================================
-
-
-# ------------------------------------------------------------
-# Ford parameters
-# ------------------------------------------------------------
-
-ford_pars <- list(
-  
-  # Initial population mean phenotypes
-  P_nat_0 = 0,
-  P_hat_0 = 0,
-  
-  # Environmental optima
-  theta_nat = 0,
-  theta_hat = 1,
-  
-  # Phenotypic variance
-  sigma2 = 1,
-  
-  # Heritability
-  h2 = 0.5,
-  
-  # Width of stabilizing selection in SD units
-  selection_sd = 1
-)
-
-run_historical_ford <- function(
-    management_dat,
-    pars
-) {
-  
-  # Ford recursion must proceed chronologically.
-  management_dat <- management_dat %>%
-    arrange(year)
-  
-  
-  # ----------------------------------------------------------
-  # Output object
-  # ----------------------------------------------------------
-  
-  out <- management_dat %>%
-    mutate(
-      P_nat_in = NA_real_,
-      P_hat_in = NA_real_,
-      P_nat_out = NA_real_,
-      P_hat_out = NA_real_
-    )
-  
-  
-  # ----------------------------------------------------------
-  # Initial phenotypic state
-  # ----------------------------------------------------------
-  
-  P_nat_current <- pars$P_nat_0
-  P_hat_current <- pars$P_hat_0
-  
-  
-  # ----------------------------------------------------------
-  # Iterate across annual management conditions
-  # ----------------------------------------------------------
-  
-  for (i in seq_len(nrow(out))) {
-    
-    # Phenotype entering this year's management event.
-    out$P_nat_in[i] <- P_nat_current
-    out$P_hat_in[i] <- P_hat_current
-    
-    
-    # --------------------------------------------------------
-    # Apply this year's realized pHOS and pNOB
-    # --------------------------------------------------------
-    
-    if (
-      !is.na(out$pHOS[i]) &&
-      !is.na(out$pNOB[i])
-    ) {
-      
-      next_state <- ford_generation(
-        P_nat = P_nat_current,
-        P_hat = P_hat_current,
-        pHOS = out$pHOS[i],
-        pNOB = out$pNOB[i],
-        pars = pars
-      )
-      
-      P_nat_next <- next_state$P_nat
-      P_hat_next <- next_state$P_hat
-      
-    } else {
-      
-      # If management metrics are undefined, no Ford update
-      # is applied for this model step.
-      P_nat_next <- P_nat_current
-      P_hat_next <- P_hat_current
-    }
-    
-    
-    # --------------------------------------------------------
-    # Store resulting phenotype
-    # --------------------------------------------------------
-    
-    out$P_nat_out[i] <- P_nat_next
-    out$P_hat_out[i] <- P_hat_next
-    
-    
-    # --------------------------------------------------------
-    # Carry state into next model step
-    # --------------------------------------------------------
-    
-    P_nat_current <- P_nat_next
-    P_hat_current <- P_hat_next
-  }
-  
-  
-  # ----------------------------------------------------------
-  # Return results
-  # ----------------------------------------------------------
-  
-  out
-}
-
-
-# ============================================================
-# Run Ford model across historical management scenarios
-# ============================================================
-
-ford_historical <- historical_results_20 %>%
-  group_split(method) %>%
-  map_dfr(
-    ~run_historical_ford(
-      management_dat = .x,
-      pars = ford_pars
-    )
-  ) %>%
-  arrange(
-    method,
-    year
-  )
-
-
-# ============================================================
-# Calculate Ford relative fitness
-# ============================================================
-
-omega2 <- calc_omega2(
-  selection_sd = ford_pars$selection_sd,
-  sigma2 = ford_pars$sigma2
-)
-
-ford_historical <- ford_historical %>%
-  mutate(
-    
-    # Relative fitness entering annual management step
-    fitness_in = exp(
-      -0.5 *
-        (P_nat_in - ford_pars$theta_nat)^2 /
-        (omega2 + ford_pars$sigma2)
-    ),
-    
-    # Relative fitness following annual management step
-    fitness_out = exp(
-      -0.5 *
-        (P_nat_out - ford_pars$theta_nat)^2 /
-        (omega2 + ford_pars$sigma2)
-    )
-  )
-
-ford_historical %>%
+# management metrics
+historical_results_20 %>%
   select(
     year,
     method,
-    P_nat_out,
-    P_hat_out
+    pNOB,
+    pHOS,
+    PNI
   ) %>%
   pivot_longer(
     cols = c(
-      P_nat_out,
-      P_hat_out
+      pNOB,
+      pHOS,
+      PNI
     ),
-    names_to = "population",
+    names_to = "metric",
+    values_to = "value"
+  ) %>%
+  mutate(
+    metric = factor(
+      metric,
+      levels = c(
+        "pNOB",
+        "pHOS",
+        "PNI"
+      )
+    )
+  ) %>%
+  ggplot(
+    aes(
+      x = year,
+      y = value,
+      color = method
+    )
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
+  facet_wrap(
+    ~metric,
+    ncol = 1
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1)
+  ) +
+  labs(
+    x = "Year",
+    y = NULL,
+    color = "Management Method"
+  ) +
+  theme_bw()
+
+ggsave(paste0(fig_path,'management_metrics.png'))
+
+
+# AHA relative fitness estimate for natural population from the optimum, this
+# estimate could include a fitness floor, but ours is set to 0 so the output
+# matches Ford's estimates below
+
+# ford_historical_age %>%
+#   ggplot(
+#     aes(
+#       x = year,
+#       y = fitness_return,
+#       color = method
+#     )
+#   ) +
+#   geom_line(linewidth = 1) +
+#   geom_point(size = 2) +
+#   scale_y_continuous(
+#     limits = c(0, 1)
+#   ) +
+#   labs(
+#     x = "Return Year",
+#     y = "Relative Natural-Population Fitness",
+#     color = "Management Method"
+#   ) +
+#   theme_bw()
+
+# prep data for Ford's phenotypic and fitness estimates
+
+
+# phenotypic response
+ford_historical_age %>%
+  select(
+    year,
+    method,
+    P_nat_return,
+    P_hat_return
+  ) %>%
+  pivot_longer(
+    cols = c(
+      P_nat_return,
+      P_hat_return
+    ),
+    names_to = "origin",
     values_to = "phenotype"
   ) %>%
   mutate(
-    population = recode(
-      population,
-      P_nat_out = "Natural Population",
-      P_hat_out = "Hatchery Population"
+    origin = recode(
+      origin,
+      P_nat_return = "Natural Origin",
+      P_hat_return = "Hatchery Origin"
     )
   ) %>%
   ggplot(
@@ -641,58 +625,62 @@ ford_historical %>%
   ) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
-  facet_wrap(~population) +
-  geom_hline(
-    data = tibble(
-      population = c(
-        "Natural Population",
-        "Hatchery Population"
-      ),
-      optimum = c(
-        ford_pars$theta_nat,
-        ford_pars$theta_hat
-      )
-    ),
-    aes(
-      yintercept = optimum
-    ),
-    linetype = "dashed",
-    inherit.aes = FALSE
-  ) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
+  facet_wrap(~origin) +
   labs(
-    title = "Ford (2002) Phenotypic Response",
-    subtitle = paste(
-      "Historical Lostine River returns with management-specific",
-      "pNOB and pHOS"
-    ),
     x = "Return Year",
     y = "Mean Phenotypic Trait",
     color = "Management Method"
   ) +
   theme_bw()
 
+ggsave(paste0(fig_path,'phenotypic_response.png'))
+
+fitness_plot_dat <- ford_historical_age %>%
+  select(
+    year,
+    method,
+    fitness_nat,
+    fitness_hat
+  ) %>%
+  pivot_longer(
+    cols = c(
+      fitness_nat,
+      fitness_hat
+    ),
+    names_to = "origin",
+    values_to = "relative_fitness"
+  ) %>%
+  mutate(
+    origin = recode(
+      origin,
+      fitness_nat = "Natural Origin",
+      fitness_hat = "Hatchery Origin"
+    )
+  )
+
+
 # relative fitness
-ford_historical %>%
+fitness_plot_dat %>%
   ggplot(
     aes(
       x = year,
-      y = fitness_out,
+      y = relative_fitness,
       color = method
     )
   ) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
+  scale_colour_viridis_d(option = "A", begin = .1, end = .9)+
+  facet_wrap(~origin) +
   scale_y_continuous(
     limits = c(0, 1)
   ) +
   labs(
-    title = "Ford's (2002) Relative Fitness",
-    subtitle = paste(
-      "Relative fitness reflects the population's mean phenotype",
-      "relative to the optimum phenotype in the natural environment."
-    ),
     x = "Return Year",
-    y = "Natural Relative Fitness",
+    y = "Relative Fitness in Natural Environment",
     color = "Management Method"
   ) +
   theme_bw()
+
+ggsave(paste0(fig_path,'relative_fitness.png'))

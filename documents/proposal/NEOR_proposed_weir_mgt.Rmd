@@ -10,9 +10,9 @@ memo_to:
 memo_cc: 
   - "Brian Simmons, DFRM Research RM&E Lead"
 memo_subject: "NPT's Proposed North East Oregon Weir Management Framework Using HSRG Recommendations"
-#memo_project: "Anchor Method Evaluation"
-#memo_id: "NPT-2026-08-HSRG"
-memo_confidential: "DRAFT"   # or "CONFIDENTIAL" (omit to disable watermark)
+#memo_project: "Proposed Weir Management"
+memo_id: "NPT-2026-08-HSRG"
+#memo_confidential: "DRAFT"   # or "CONFIDENTIAL" (omit to disable watermark)
 output:
   bookdown::pdf_document2:
     citation_package: biblatex #natbib

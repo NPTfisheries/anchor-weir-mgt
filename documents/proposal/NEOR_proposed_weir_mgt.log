@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.8.28)  28 AUG 2026 15:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.1)  1 OCT 2026 14:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **NEOR_proposed_weir_mgt.tex
 (./NEOR_proposed_weir_mgt.tex
 LaTeX2e <2026-06-01>
-L3 programming layer <2026-08-10>
+L3 programming layer <2026-09-09>
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
@@ -31,9 +31,9 @@ Package: inputenc 2024/02/08 v1.3d Input encoding file
 ) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/newtxtext.sty
 Package: newtxtext 2024/04/01 v1.744(Michael Sharpe) latex and unicode latex support for TeXGyreTermesX
 `newtxtext' v1.744, 2024/04/01 Text macros taking advantage of TeXGyre Termes and its extensions (msharpe) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xpatch/xpatch.sty (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2026-08-10 L3 programming layer (loader) 
+Package: expl3 2026-09-09 L3 programming layer (loader) 
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/l3backend-pdftex.def
-File: l3backend-pdftex.def 2026-08-10 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2026-09-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count284
 ))
 Package: xpatch 2020/03/25 v0.3a Extending etoolbox patching commands
@@ -562,7 +562,7 @@ Package caption Info: longtable package is loaded.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.sty
-Package: biblatex 2026/08/13 v3.22 programmable bibliographies (PK/MW)
+Package: biblatex 2026/09/24 v3.22a programmable bibliographies (PK/MW)
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
 \lrq@indent=\count335
@@ -629,7 +629,7 @@ File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-dm.def
-File: blx-dm.def 2026/08/13 v3.22 biblatex datamodel (PK/MW)
+File: blx-dm.def 2026/09/24 v3.22a biblatex datamodel (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex style data model...
 Package biblatex Info: ... file 'authoryear-comp.dbx' not found.
@@ -720,12 +720,12 @@ Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-compat.def
-File: blx-compat.def 2026/08/13 v3.22 biblatex compatibility (PK/MW)
+File: blx-compat.def 2026/09/24 v3.22a biblatex compatibility (PK/MW)
 )
 Package biblatex Info: Trying to load generic definitions...
 Package biblatex Info: ... file 'biblatex.def' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.def
-File: biblatex.def 2026/08/13 v3.22 biblatex compatibility (PK/MW)
+File: biblatex.def 2026/09/24 v3.22a biblatex compatibility (PK/MW)
 \c@textcitecount=\count450
 \c@textcitetotal=\count451
 \c@textcitemaxnames=\count452
@@ -743,28 +743,28 @@ File: biblatex.def 2026/08/13 v3.22 biblatex compatibility (PK/MW)
 Package biblatex Info: Trying to load natbib compatibility...
 Package biblatex Info: ... file 'blx-natbib.def' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-natbib.def
-File: blx-natbib.def 2026/08/13 v3.22 biblatex compatibility (PK/MW)
+File: blx-natbib.def 2026/09/24 v3.22a biblatex compatibility (PK/MW)
 Package biblatex Info: Delimiter 'nameyeardelim' in context '' already defined, overwriting.
 )
 Package biblatex Info: Trying to load bibliography style 'authoryear-comp'...
 Package biblatex Info: ... file 'authoryear-comp.bbx' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/authoryear-comp.bbx
-File: authoryear-comp.bbx 2026/08/13 v3.22 biblatex bibliography style (PK/MW)
+File: authoryear-comp.bbx 2026/09/24 v3.22a biblatex bibliography style (PK/MW)
 Package biblatex Info: Trying to load bibliography style 'authoryear'...
 Package biblatex Info: ... file 'authoryear.bbx' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/authoryear.bbx
-File: authoryear.bbx 2026/08/13 v3.22 biblatex bibliography style (PK/MW)
+File: authoryear.bbx 2026/09/24 v3.22a biblatex bibliography style (PK/MW)
 Package biblatex Info: Trying to load bibliography style 'standard'...
 Package biblatex Info: ... file 'standard.bbx' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
-File: standard.bbx 2026/08/13 v3.22 biblatex bibliography style (PK/MW)
+File: standard.bbx 2026/09/24 v3.22a biblatex bibliography style (PK/MW)
 \c@bbx:relatedcount=\count459
 \c@bbx:relatedtotal=\count460
 )))
 Package biblatex Info: Trying to load citation style 'authoryear-comp'...
 Package biblatex Info: ... file 'authoryear-comp.cbx' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/cbx/authoryear-comp.cbx
-File: authoryear-comp.cbx 2026/08/13 v3.22 biblatex citation style (PK/MW)
+File: authoryear-comp.cbx 2026/09/24 v3.22a biblatex citation style (PK/MW)
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
@@ -786,14 +786,12 @@ File: biblatex.cfg
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Document encoding is UTF8 ....
 Package biblatex Info: ... and expl3
-(biblatex)             2026-08-10 L3 programming layer (loader) 
+(biblatex)             2026-09-09 L3 programming layer (loader) 
 (biblatex)             is new enough (at least 2020/04/06),
 (biblatex)             setting 'casechanger=expl3'.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty
-Package: blx-case-expl3 2026/08/13 v3.22 expl3 case changing code for biblatex
-)) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/draftwatermark/draftwatermark.sty
-Package: draftwatermark 2024/03/04 3.3 Put a gray textual watermark on document pages
-) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tcolorbox/tcolorbox.sty
+Package: blx-case-expl3 2026/09/24 v3.22a expl3 case changing code for biblatex
+)) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tcolorbox/tcolorbox.sty
 Package: tcolorbox 2026/05/28 version 6.10.0 text color boxes
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
 \pgfutil@everybye=\toks40
@@ -1095,55 +1093,55 @@ Grid set 16 x 16 = 38.39343pt x 49.68562pt
 \TP@tbargs=\toks55
 TextBlockOrigin set to 0pt x 0pt
 )
-LaTeX Font Info:    Trying to load font information for T1+ntxtlf on input line 181.
+LaTeX Font Info:    Trying to load font information for T1+ntxtlf on input line 177.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2021/05/24 v1.1 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 181.
+(Font)              scaled to size 12.0pt on input line 177.
 \@quotelevel=\count499
 \@quotereset=\count500
 (./NEOR_proposed_weir_mgt.aux)
 \openout1 = `NEOR_proposed_weir_mgt.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 181.
-LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line 181.
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 177.
+LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line 177.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 181.
-LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 181.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 177.
+LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 177.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 181.
-LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 181.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 177.
+LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 177.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 181.
-LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 181.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 177.
+LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 177.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 181.
-LaTeX Font Info:    ... okay on input line 181.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 177.
+LaTeX Font Info:    ... okay on input line 177.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/grfext/grfext.sty
@@ -1158,8 +1156,8 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \c@mv@tabular=\count501
 \c@mv@boldtabular=\count502
-LaTeX Info: Command `\dddot' is already robust on input line 181.
-LaTeX Info: Command `\ddddot' is already robust on input line 181.
+LaTeX Info: Command `\dddot' is already robust on input line 177.
+LaTeX Info: Command `\ddddot' is already robust on input line 177.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1194,13 +1192,13 @@ LaTeX Info: Command `\ddddot' is already robust on input line 181.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 181.
-Package microtype Info: Applying patch `item' on input line 181.
-Package microtype Info: Applying patch `toc' on input line 181.
-Package microtype Info: Applying patch `eqnum' on input line 181.
-Package microtype Info: Applying patch `footnote' on input line 181.
-Package microtype Info: Applying patch `verbatim' on input line 181.
-LaTeX Info: Redefining \microtypesetup on input line 181.
+LaTeX Info: Redefining \microtypecontext on input line 177.
+Package microtype Info: Applying patch `item' on input line 177.
+Package microtype Info: Applying patch `toc' on input line 177.
+Package microtype Info: Applying patch `eqnum' on input line 177.
+Package microtype Info: Applying patch `footnote' on input line 177.
+Package microtype Info: Applying patch `verbatim' on input line 177.
+LaTeX Info: Redefining \microtypesetup on input line 177.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1214,7 +1212,7 @@ Package microtype Info: No adjustment of character kerning.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-Package hyperref Info: Link coloring ON on input line 181.
+Package hyperref Info: Link coloring ON on input line 177.
 (./NEOR_proposed_weir_mgt.out) (./NEOR_proposed_weir_mgt.out)
 \@outlinefile=\write5
 \openout5 = `NEOR_proposed_weir_mgt.out'.
@@ -1225,7 +1223,7 @@ Package caption Info: End \AtBeginDocument code.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/lbx/english.lbx
-File: english.lbx 2026/08/13 v3.22 biblatex localization (PK/MW)
+File: english.lbx 2026/09/24 v3.22a biblatex localization (PK/MW)
 )
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
@@ -1235,113 +1233,111 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'NEOR_proposed_weir_mgt.bbl' found.
 (./NEOR_proposed_weir_mgt.bbl)
-Package biblatex Info: Reference section=0 on input line 181.
-Package biblatex Info: Reference segment=0 on input line 181.
+Package biblatex Info: Reference section=0 on input line 177.
+Package biblatex Info: Reference segment=0 on input line 177.
 \c@lstlisting=\count503
 <../../templates/NPT.png, id=86, 110.814pt x 108.405pt>
 File: ../../templates/NPT.png Graphic file (type png)
 <use ../../templates/NPT.png>
-Package pdftex.def Info: ../../templates/NPT.png  used on input line 184.
+Package pdftex.def Info: ../../templates/NPT.png  used on input line 180.
 (pdftex.def)             Requested size: 58.16975pt x 56.9055pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 20.74pt on input line 187.
+(Font)              scaled to size 20.74pt on input line 183.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 188.
+(Font)              scaled to size 12.0pt on input line 184.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 17.28pt on input line 188.
+(Font)              scaled to size 17.28pt on input line 184.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.0pt on input line 189.
-LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input line 189.
+(Font)              scaled to size 10.0pt on input line 185.
+LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input line 185.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.0pt on input line 189.
+(Font)              scaled to size 10.0pt on input line 185.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 191.
+(Font)              scaled to size 10.0pt on input line 187.
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 191.
+(Font)              scaled to size 10.0pt on input line 187.
 <../../templates/DFRM.png, id=88, 102.6234pt x 102.6234pt>
 File: ../../templates/DFRM.png Graphic file (type png)
 <use ../../templates/DFRM.png>
-Package pdftex.def Info: ../../templates/DFRM.png  used on input line 195.
+Package pdftex.def Info: ../../templates/DFRM.png  used on input line 191.
 (pdftex.def)             Requested size: 56.90654pt x 56.9055pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 198.
+(Font)              scaled to size 14.4pt on input line 194.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 198.
-LaTeX Font Info:    Trying to load font information for T1+qhv on input line 198.
+(Font)              scaled to size 14.4pt on input line 194.
+LaTeX Font Info:    Trying to load font information for T1+qhv on input line 194.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tex-gyre/t1qhv.fd
 File: t1qhv.fd 2009/09/25 v1.2 font definition file for T1/qhv
 )
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 13.53603pt on input line 198.
+(Font)              scaled to size 13.53603pt on input line 194.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `qhv' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/ot1minntx.fd) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/untxmia.fd) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/untxsym.fd) (c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/newtx/untxsyc.fd)
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 17.28pt on input line 211.
+(Font)              scaled to size 17.28pt on input line 207.
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 16.24324pt on input line 211.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 153.57375pt on input line 218.
-[1{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}
+(Font)              scaled to size 16.24324pt on input line 207.
+[1
 
-{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/tex-gyre/q-ec.enc}{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc} <../../templates/NPT.png> <../../templates/DFRM.png>]
+{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/tex-gyre/q-ec.enc}{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc} <../../templates/NPT.png> <../../templates/DFRM.png>]
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 11.28003pt on input line 241.
+(Font)              scaled to size 11.28003pt on input line 234.
 [2]
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 11.28003pt on input line 242.
+(Font)              scaled to size 11.28003pt on input line 238.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 242.
+(hyperref)                be the same. Added a new anchor on input line 238.
 
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 249.
+(Font)              scaled to size 12.0pt on input line 245.
 [3]
 <NEOR_proposed_weir_mgt_files/figure-latex/hsrg-management-matrix-1.pdf, id=123, 469.755pt x 325.215pt>
 File: NEOR_proposed_weir_mgt_files/figure-latex/hsrg-management-matrix-1.pdf Graphic file (type pdf)
 <use NEOR_proposed_weir_mgt_files/figure-latex/hsrg-management-matrix-1.pdf>
-Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/hsrg-management-matrix-1.pdf  used on input line 304.
+Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/hsrg-management-matrix-1.pdf  used on input line 300.
 (pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 12.0pt on input line 308.
+(Font)              scaled to size 12.0pt on input line 304.
 [4] [5 <./NEOR_proposed_weir_mgt_files/figure-latex/hsrg-management-matrix-1.pdf>]
 <NEOR_proposed_weir_mgt_files/figure-latex/proposed-management-matrix-1.pdf, id=142, 469.755pt x 325.215pt>
 File: NEOR_proposed_weir_mgt_files/figure-latex/proposed-management-matrix-1.pdf Graphic file (type pdf)
 <use NEOR_proposed_weir_mgt_files/figure-latex/proposed-management-matrix-1.pdf>
-Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/proposed-management-matrix-1.pdf  used on input line 338.
+Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/proposed-management-matrix-1.pdf  used on input line 334.
 (pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 [6] [7 <./NEOR_proposed_weir_mgt_files/figure-latex/proposed-management-matrix-1.pdf>]
 
-LaTeX Warning: Reference `plot-pni-surface' on page 8 undefined on input line 355.
+LaTeX Warning: Reference `plot-pni-surface' on page 8 undefined on input line 351.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.8pt on input line 370.
+(Font)              scaled to size 8.8pt on input line 366.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.6pt on input line 370.
+(Font)              scaled to size 6.6pt on input line 366.
 <NEOR_proposed_weir_mgt_files/figure-latex/plot-pni-surface-1.pdf, id=162, 469.755pt x 325.215pt>
 File: NEOR_proposed_weir_mgt_files/figure-latex/plot-pni-surface-1.pdf Graphic file (type pdf)
 <use NEOR_proposed_weir_mgt_files/figure-latex/plot-pni-surface-1.pdf>
-Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/plot-pni-surface-1.pdf  used on input line 385.
+Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/plot-pni-surface-1.pdf  used on input line 381.
 (pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 [8] [9{c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc} <./NEOR_proposed_weir_mgt_files/figure-latex/plot-pni-surface-1.pdf>] [10] [11]
 <NEOR_proposed_weir_mgt_files/figure-latex/compare-pni-1.pdf, id=195, 469.755pt x 325.215pt>
 File: NEOR_proposed_weir_mgt_files/figure-latex/compare-pni-1.pdf Graphic file (type pdf)
 <use NEOR_proposed_weir_mgt_files/figure-latex/compare-pni-1.pdf>
-Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/compare-pni-1.pdf  used on input line 464.
+Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/compare-pni-1.pdf  used on input line 460.
 (pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 <NEOR_proposed_weir_mgt_files/figure-latex/pni-differnce-1.pdf, id=196, 469.755pt x 325.215pt>
 File: NEOR_proposed_weir_mgt_files/figure-latex/pni-differnce-1.pdf Graphic file (type pdf)
 <use NEOR_proposed_weir_mgt_files/figure-latex/pni-differnce-1.pdf>
-Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/pni-differnce-1.pdf  used on input line 473.
+Package pdftex.def Info: NEOR_proposed_weir_mgt_files/figure-latex/pni-differnce-1.pdf  used on input line 469.
 (pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
 [12 <./NEOR_proposed_weir_mgt_files/figure-latex/compare-pni-1.pdf>]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/sc' will be
-(Font)              scaled to size 12.0pt on input line 482.
+(Font)              scaled to size 12.0pt on input line 478.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/ntxtlf/m/sc/12'.
 (microtype)             Ignoring protrusion settings for this character.
@@ -1365,18 +1361,18 @@ Package logreq Info: Writing requests to 'NEOR_proposed_weir_mgt.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 42849 strings out of 469089
- 849727 string characters out of 5457461
- 1694435 words of memory out of 5000000
- 71106 multiletter control sequences out of 15000+600000
- 706037 words of font info for 181 fonts, out of 8000000 for 9000
+ 42750 strings out of 469040
+ 847062 string characters out of 5455509
+ 1694017 words of memory out of 5000000
+ 71064 multiletter control sequences out of 15000+600000
+ 703750 words of font info for 178 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 106i,13n,117p,1215b,2024s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 106i,12n,117p,1215b,2024s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/NewTXMI.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qhvb.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qhvr.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qtmb.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/tex-gyre/qtmr.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txexs.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txmiaX.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/txsys.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmb.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmr.pfb><c:/Users/ryank/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/newtx/ztmri.pfb>
-Output written on NEOR_proposed_weir_mgt.pdf (14 pages, 405004 bytes).
+Output written on NEOR_proposed_weir_mgt.pdf (14 pages, 404161 bytes).
 PDF statistics:
  297 PDF objects out of 1000 (max. 8388607)
  212 compressed objects within 3 object streams
  31 named destinations out of 1000 (max. 500000)
- 44832 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 42784 words of extra memory for PDF output out of 42996 (max. 10000000)
 
